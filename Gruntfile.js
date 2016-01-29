@@ -8,10 +8,6 @@ module.exports = function( grunt ) {
             react: {
                 files: 'components/*.jsx',
                 tasks: [ 'env:dev', 'eslint:components', 'browserify' ]
-            },
-            uglify: {
-                files: 'www/scripts/app.built.js',
-                tasks: [ 'uglify' ]
             }
         },
 
