@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../components/App.jsx"],"names":[],"mappings":";;;;;;;;;;;;;;;;AAIA,mBAAS,MAAT,CACI,wDADJ,EAEI,SAAS,cAAT,CAAyB,QAAzB,CAFJ","file":"app.built.js","sourcesContent":["import React from 'react';\nimport ReactDOM from 'react-dom';\nimport RankTable from './RankTable';\n\nReactDOM.render(\n    <RankTable />,\n    document.getElementById( 'js-app' )\n);\n"]}

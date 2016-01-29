@@ -1,0 +1,42 @@
+{
+  "name": "hearthstone-legend-ranks",
+  "version": "1.0.0",
+  "description": "Track legend ranks for Hearthstone via twitch screenshots",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Oskar Risberg <kokarn@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-preset-es2015": "^6.3.13",
+    "babel-preset-react": "^6.3.13",
+    "babelify": "^7.2.0",
+    "d3": "^3.5.13",
+    "debounce": "^1.0.0",
+    "element-resize-event": "^2.0.3",
+    "eslint-plugin-react": "^3.15.0",
+    "grunt": "^0.4.5",
+    "grunt-browserify": "^4.0.1",
+    "grunt-cli": "^0.1.13",
+    "grunt-contrib-uglify": "^0.11.0",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-env": "^0.4.4",
+    "grunt-eslint": "^17.3.1",
+    "grunt-sftp-deploy": "^0.2.4",
+    "jquery": "^2.2.0",
+    "load-grunt-tasks": "^3.4.0",
+    "material-ui": "^0.14.2",
+    "moment": "^2.11.1",
+    "query-string": "^3.0.0",
+    "react": "^0.14.6",
+    "react-d3": "^0.4.0",
+    "react-d3-basic": "^1.5.2",
+    "react-d3-core": "^1.1.4",
+    "react-d3-tooltip": "^1.4.1",
+    "react-dom": "^0.14.6",
+    "react-tap-event-plugin": "^0.2.1",
+    "react-time": "^4.0.0",
+    "xhr": "^2.2.0"
+  }
+}
