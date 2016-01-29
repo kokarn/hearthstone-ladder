@@ -55,8 +55,6 @@ CharacterFinder.prototype.onImgLoad = function(){
 
     this.context.drawImage( this.img, 0, this.img.height - this.ypos, this.width, this.height, 0, 0, this.width, this.height );
 
-    this.contextData = this.context.getImageData( 0, 0, this.width, this.height ).data;
-
     var tracedShapes = this.traceAll( {
         r: 221,
         g: 216,
@@ -209,18 +207,8 @@ CharacterFinder.prototype.onPixels = function( fn ){
 }
 
 CharacterFinder.prototype.getPixelColor = function( x, y, canvas ){
-    if( canvas ){
-        var data = canvas.getContext( '2d' ).getImageData( 0, 0, this.width, this.height ).data;
-    } else {
-        canvas = this.canvas;
-        var data = this.contextData;
-    }
-
-    //console.log( ( ( canvas.width * y ) + x ) * 4 );
-
-    //console.log( data[ ( ( canvas.width * y ) + x ) * 4 ] );
-
-    //console.log( data );
+    canvas = canvas || this.canvas;
+    var data = canvas.getContext( '2d' ).getImageData( 0, 0, this.width, this.height ).data;
 
     return {
         r: data[ ( ( canvas.width * y ) + x ) * 4 ],
