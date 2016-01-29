@@ -85,7 +85,7 @@ CharacterFinder.prototype.onImgLoad = function(){
         if( boundaries.ymin != 0 && boundaries.xmax - boundaries.xmin < 25 ){
 
             this.drawRect( boundaries.xmin - 2, boundaries.ymin - 2, boundaries.xmax + 2, boundaries.ymax + 2, '#f00' );
-            correct++;
+            correct = correct + 1;
 
             this.drawPixels( numberShapes[ i ], '#0f0' );
 
@@ -119,8 +119,6 @@ CharacterFinder.prototype.onImgLoad = function(){
         }
     }
 
-
-
     for( var i = 0, l = this.onCompleteCallbacks.length; i < l; i = i + 1 ){
         this.onCompleteCallbacks[ i ].bind( this )( this.filePath, parseInt( resultingNumbers.join('') ) );
     }
@@ -136,7 +134,6 @@ CharacterFinder.prototype.contrast = function(){
             self.drawPixel( x, y, '#FFF' );
         }
     });
-
 };
 
 CharacterFinder.prototype.drawPixel = function( x, y, color ){
@@ -156,6 +153,7 @@ CharacterFinder.prototype.traceAll = function( byColor ){
             tracedShapes.push( tracedShape );
         }
     }).bind( this ));
+
 
     return tracedShapes;
 }
@@ -220,7 +218,8 @@ CharacterFinder.prototype.getPixelColor = function( x, y, canvas ){
 
 CharacterFinder.prototype.drawPixel = function( x, y, color ){
     this.context.fillStyle = color || '#FFF';
-    this.context.fillRect( x, y, 1, 1 );        }
+    this.context.fillRect( x, y, 1, 1 );
+}
 
 CharacterFinder.prototype.drawPixels = function( arr, color ){
     for( var i = 0, l = arr.length; i < l; i++ ){
