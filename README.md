@@ -1,5 +1,7 @@
 The current version is deployed to http://kokarn.com/hearthstone-legends/
 
+Database dump 29/1 13:50 is available here: http://kokarn.com/hearthstone-legends/dbdump.sql
+
 Second version should use this https://github.com/andersmattson/hearthstone-rank-ocr-reader
 and probably vagrant.
 
