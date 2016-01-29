@@ -7,13 +7,6 @@ var verb = require( 'verb-nurbs' );
 var CharacterFinder = function( filePath, width, height ){
     var _this = this;
 
-    /*
-    this.img = document.createElement("img");
-    this.img.style.display = 'none';
-
-    document.body.appendChild( this.img );
-    */
-
     this.onCompleteCallbacks = [];
     this.filePath = filePath;
 
@@ -26,8 +19,6 @@ var CharacterFinder = function( filePath, width, height ){
         _this.img.src = inputImage;
 
         _this.canvas = new Canvas( width, height );
-        //this.canvas.style.display = 'none';
-        //document.body.appendChild( this.canvas );
 
         _this.context = _this.canvas.getContext( '2d' );
         _this.width = width;
@@ -38,7 +29,6 @@ var CharacterFinder = function( filePath, width, height ){
         _this.canvas.width = _this.width;
         _this.canvas.height = _this.height;
 
-        //this.img.onload = this.onImgload.bind(this);
         _this.onImgLoad();
     });
 };
