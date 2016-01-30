@@ -8,7 +8,9 @@ sudo curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
 sudo apt-get install -y nodejs
 
 # Install npm
-apt-get install -y npm
+sudo apt-get install -y npm
+
+sudo npm install -g npm
 
 # Install dependencies needed for node-canvas
 apt-get install -y libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++
