@@ -13,7 +13,7 @@ sudo apt-get install -y npm
 sudo npm install -g npm
 
 # Install dependencies needed for node-canvas
-apt-get install -y libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++
+sudo apt-get install -y libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++
 
 cd /vagrant
 npm install
