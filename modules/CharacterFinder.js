@@ -1,8 +1,8 @@
 var Canvas = require( 'canvas' );
 var Image = Canvas.Image;
 var fs = require( 'fs' );
-//var verb = require( '../node_modules/verb-nurbs/build/js/verb.js' );
-var verb = require( 'verb-nurbs' );
+var verb = require( '../node_modules/verb-nurbs/build/js/verb.js' );
+//var verb = require( 'verb-nurbs' );
 
 var CharacterFinder = function( filePath, width, height ){
     var _this = this;
