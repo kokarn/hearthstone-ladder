@@ -1,6 +1,8 @@
 var Canvas = require( 'canvas' );
 var Image = Canvas.Image;
 var fs = require( 'fs' );
+var http = require( 'http' );
+var Stream = require( 'stream' ).Transform;
 var verb = require( '../node_modules/verb-nurbs/build/js/verb.js' );
 //var verb = require( 'verb-nurbs' );
 
@@ -9,32 +11,57 @@ var CharacterFinder = function( filePath, width, height ){
 
     this.onCompleteCallbacks = [];
     this.filePath = filePath;
+    this.width = width;
+    this.height = height;
 
-    fs.readFile( filePath, function( error, inputImage ) {
+    console.log( 'Loading ', filePath );
+
+    // This doesn't work for some reason, callstack get's exceeded
+    // Loading local files work
+    var request = http.request( filePath, function( response ){
+        var data = new Stream();
+
+        if( response.statusCode !== 200 ){
+            console.log( 'Unable to load file', filePath, ' Its probably not online anymore' );
+            return false;
+        }
+
+        response.on( 'data', function( chunk ){
+            data.push( chunk );
+        });
+
+        response.on( 'end', function() {
+            _this.setImg( data.read() );
+        });
+    });
+
+    request.on( 'error', ( error ) => {
+        console.log( `problem with request: ${error.message}` );
+    });
+
+    request.end();
+
+    return true;
+    fs.readFile( filePath, function( error, imageData ) {
         if ( error ) {
             throw error;
         }
 
-        _this.img = new Image;
-        _this.img.src = inputImage;
-
-        _this.canvas = new Canvas( width, height );
-
-        _this.context = _this.canvas.getContext( '2d' );
-        _this.width = width;
-        _this.height = height;
-        _this.ypos = 185;
-        _this.contrastLimit = 140;
-
-        _this.canvas.width = _this.width;
-        _this.canvas.height = _this.height;
-
-        _this.onImgLoad();
+        _this.setImg( imageData );
     });
 };
 
-CharacterFinder.prototype.setImg = function( src ){
-    this.img.src = src;
+CharacterFinder.prototype.setImg = function( inputImageData ){
+    this.img = new Image;
+    this.img.src = inputImageData;
+
+    this.canvas = new Canvas( this.width, this.height );
+    this.context = this.canvas.getContext( '2d' );
+
+    this.ypos = 185;
+    this.contrastLimit = 140;
+
+    this.onImgLoad();
 };
 
 CharacterFinder.prototype.onImgLoad = function(){
@@ -113,6 +140,14 @@ CharacterFinder.prototype.onImgLoad = function(){
         this.onCompleteCallbacks[ i ].bind( this )( this.filePath, parseInt( resultingNumbers.join('') ) );
     }
 }
+
+CharacterFinder.prototype.saveMatchImage = function( filename ){
+    var base64Data = this.canvas.toDataURL().replace( /^data:image\/png;base64,/, '' );
+
+    fs.writeFile( filename, base64Data, 'base64', function( error ){
+        console.log( error );
+    });
+};
 
 CharacterFinder.prototype.contrast = function(){
     var self = this;
