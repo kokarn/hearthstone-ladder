@@ -35,6 +35,8 @@ include( '../includes/default.php' );
         </ul>
 
         <ul class="nav navbar-nav pull-xs-right">
+            <?php
+            /*
             <li class="nav-item">
                 <form class="form-inline" method="get" action="channel.php">
                     <select class="form-control js-channel-select" name="channel">
@@ -55,7 +57,7 @@ include( '../includes/default.php' );
                     </select>
                 </form>
             </li>
-            <?php
+            */
             $query = 'SELECT COUNT( DISTINCT channel ) FROM matches';
             $PDO = Database::$connection->prepare( $query );
             $PDO->execute();
