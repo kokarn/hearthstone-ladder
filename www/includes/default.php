@@ -61,8 +61,8 @@ function isValidMatchDifferance( $match1, $match2 ){
         return true;
     endif;
 
-    // If the total rank difference is less than 50 then it should be valid
-    if( abs( $match1->rank - $match2->rank ) < 50 ):
+    // If the total rank difference is less than 70 then it should be valid
+    if( abs( $match1->rank - $match2->rank ) < 70 ):
         return true;
     endif;
 
