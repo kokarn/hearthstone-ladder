@@ -73,7 +73,7 @@ if( isset( $_GET[ 'channel' ] ) ) :
                 $index = 0 + str_replace( '.jpg', '', $filename );
 
                 if( $index > 0 ):
-                    $query = 'UPDATE matches SET rank = :rank WHERE id = :id LIMIT 1';
+                    $query = 'UPDATE matches SET rank = :rank, timestamp = timestamp WHERE id = :id LIMIT 1';
                     $PDO = Database::$connection->prepare( $query );
                     $newRank = $bestGuess->getAsString();
                     $PDO->bindValue( ':rank', $newRank );
