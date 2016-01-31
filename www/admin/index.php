@@ -164,7 +164,7 @@ include( '../includes/default.php' );
                                 <?php echo $player[ 'name' ]; ?>
                             </td>
                             <td>
-                                <a href="channel.php?channel=<?php echo $player[ 'channel' ]; ?>" class="btn">
+                                <a href="channel.php?channel=<?php echo $player[ 'channel' ]; ?>">
                                     View
                                 </a>
                             </td>
