@@ -27,7 +27,7 @@ while( $row = $PDO->fetch() ):
             >
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
-                        <img src="../tmp/<?php echo $row->id; ?>.jpg" style="max-width: 100%">
+                        <img data-src="../tmp/<?php echo $row->id; ?>.jpg" style="max-width: 100%">
                         <div class="modal-footer">
                             <span class="pull-md-left">
                                 Detected as <?php echo $row->rank; ?>

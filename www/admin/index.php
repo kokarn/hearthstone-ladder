@@ -259,5 +259,11 @@ include( '../includes/default.php' );
         $( '.js-channel-select' ).on( 'change', function( event ){
             $( this ).parent( 'form' ).submit();
         });
+
+        $( document ).on( 'show.bs.modal', function( event ){
+            $( event.target ).find( 'img' ).each( function( index, element ){
+                $( element ).attr( 'src', $( element ).data( 'src' ) );
+            });
+        })
     });
 </script>

@@ -263,7 +263,7 @@ if( isset( $_GET[ 'channel' ] ) ):
             >
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
-                        <img src="<?php echo $url; ?>" style="max-width: 100%;">
+                        <img data-src="<?php echo $url; ?>" style="max-width: 100%;">
                     </div>
                 </div>
             </div>
@@ -342,7 +342,7 @@ if( isset( $_GET[ 'channel' ] ) ):
                                 >
                                     <div class="modal-dialog modal-lg">
                                         <div class="modal-content">
-                                            <img src="../tmp/<?php echo $data->id; ?>.jpg" style="max-width: 100%">
+                                            <img data-src="../tmp/<?php echo $data->id; ?>.jpg" style="max-width: 100%">
                                             <div class="modal-footer">
                                                 <span class="pull-md-left">
                                                     Detected as <?php echo $data->rank; ?>
@@ -392,3 +392,12 @@ endif;
 ?>
 <script src="https://cdn.jsdelivr.net/jquery/2.2.0/jquery.min.js"></script>
 <script src="https://cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/js/bootstrap.min.js"></script>
+<script>
+$(function(){
+    $( document ).on( 'show.bs.modal', function( event ){
+        $( event.target ).find( 'img' ).each( function( index, element ){
+            $( element ).attr( 'src', $( element ).data( 'src' ) );
+        });
+    })
+});
+</script>
