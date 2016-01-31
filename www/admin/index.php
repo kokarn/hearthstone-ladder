@@ -210,7 +210,7 @@ include( '../includes/default.php' );
                 <thead>
                     <tr>
                         <th>
-                            Channel
+                            Player
                         </th>
                         <th>
                             Rank
@@ -225,7 +225,7 @@ include( '../includes/default.php' );
                             Status
                         </th>
                         <th>
-                            Detect
+                            Channel
                         </th>
                         <th>
                             Delete

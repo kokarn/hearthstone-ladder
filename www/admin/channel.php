@@ -342,6 +342,14 @@ if( isset( $_GET[ 'channel' ] ) ):
                                 >
                                     <div class="modal-dialog modal-lg">
                                         <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                                <h4 class="modal-title">
+                                                    <?php echo htmlentities( $data->status ); ?>
+                                                </h4>
+                                            </div>
                                             <img data-src="../tmp/<?php echo $data->id; ?>.jpg" style="max-width: 100%">
                                             <div class="modal-footer">
                                                 <span class="pull-md-left">
