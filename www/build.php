@@ -8,7 +8,7 @@ foreach( glob( 'comparisons/*.jpg' ) as $file ):
 endforeach;
 
 $wantedImages = array();
-for( $x = 1; $x <= 4; $x = $x + 1 ):
+for( $x = 1; $x <= 5; $x = $x + 1 ):
     for( $i = 1; $i <= $x; $i = $i + 1 ):
         for( $y = 0; $y <= 9; $y = $y + 1 ):
 

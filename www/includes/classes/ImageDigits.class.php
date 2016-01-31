@@ -50,6 +50,13 @@ class ImageDigits {
                     2 => 31,
                     3 => 53,
                     4 => 75
+                ),
+                5 => array(
+                    1 => -2,
+                    2 => 20,
+                    3 => 42,
+                    4 => 64,
+                    5 => 88
                 )
             ),
             'y' => array(
@@ -178,7 +185,7 @@ class ImageDigits {
     public function getDigits(){
         $matches = array();
 
-        for( $digits = 1; $digits <= 4; $digits = $digits + 1 ):
+        for( $digits = 1; $digits <= 5; $digits = $digits + 1 ):
             // If we haven't set any matches for this number of digits before
             if( !isset( $matches[ $digits ] ) ):
                 if( isset( $this->channelStatus ) ):
