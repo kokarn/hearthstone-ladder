@@ -35,8 +35,6 @@ include( '../includes/default.php' );
         </ul>
 
         <ul class="nav navbar-nav pull-xs-right">
-            <?php
-            /*
             <li class="nav-item">
                 <form class="form-inline" method="get" action="channel.php">
                     <select class="form-control js-channel-select" name="channel">
@@ -57,7 +55,7 @@ include( '../includes/default.php' );
                     </select>
                 </form>
             </li>
-            */
+            <?php
             $query = 'SELECT COUNT( DISTINCT channel ) FROM matches';
             $PDO = Database::$connection->prepare( $query );
             $PDO->execute();
@@ -77,7 +75,7 @@ include( '../includes/default.php' );
     <div class="row">
         <div class="col-md-4">
             <h1 class="display-4">
-                Players
+                Needs action
             </h1>
             <table class="table table-striped table-sm table-hover">
                 <thead>
@@ -89,10 +87,7 @@ include( '../includes/default.php' );
                             Real name
                         </th>
                         <th>
-                            Indexing
-                        </th>
-                        <th>
-                            Biggest diff
+                            View
                         </th>
                     </tr>
                 </thead>
@@ -106,8 +101,7 @@ include( '../includes/default.php' );
                         status,
                         name,
                         players.should_index,
-                        players.x,
-                        players.y
+                        verified
                         FROM
                             matches
                         LEFT JOIN
@@ -126,8 +120,6 @@ include( '../includes/default.php' );
                                 'channel' => $row->channel,
                                 'name' => $row->name,
                                 'should_index' => $row->should_index,
-                                'x' => $row->x,
-                                'y' => $row->y,
                                 'matches' => array()
                             );
                         endif;
@@ -140,60 +132,39 @@ include( '../includes/default.php' );
                             continue;
                         endif;
 
-                        $biggestDiff = false;
+                        $needsAttention = false;
                         foreach( $player[ 'matches' ] as $index => $match ):
                             if( $index == 0 ):
                                 continue;
                             endif;
 
-                            $currentDiff = percentageDifference( $player[ 'matches' ][ $index - 1 ]->rank, $player[ 'matches' ][ $index ]->rank );
-
-                            if( $biggestDiff === false || ( $currentDiff > $biggestDiff ) ):
-                                $biggestDiff = $currentDiff;
+                            if( !isValidMatchDifferance( $player[ 'matches' ][ $index - 1 ], $player[ 'matches' ][ $index ] ) ):
+                                $needsAttention = true;
+                                break;
                             endif;
                         endforeach;
 
-                        if( $biggestDiff > 100 ):
-                            ?>
-                            <tr class="table-danger">
-                            <?php
-                        else:
-                            ?>
-                            <tr>
-                            <?php
+                        if( !$needsAttention ):
+                            if( empty( $player[ 'name' ] ) ):
+                                $needsAttention = true;
+                            endif;
+                        endif;
+
+                        if( !$needsAttention ):
+                            continue;
                         endif;
                         ?>
+                        <tr>
                             <td>
-                                <a href="channel.php?channel=<?php echo $player[ 'channel' ]; ?>">
-                                    <?php echo $player[ 'channel' ]; ?>
-                                </a>
+                                <?php echo $player[ 'channel' ]; ?>
                             </td>
                             <td>
                                 <?php echo $player[ 'name' ]; ?>
                             </td>
                             <td>
-                                <?php
-                                if( $player[ 'should_index' ] ):
-                                    ?>
-                                    <span class="label label-success">
-                                        Yes
-                                    </span>
-                                    <?php
-                                else:
-                                    ?>
-                                    <span class="label label-danger">
-                                        No
-                                    </span>
-                                    <?php
-                                endif;
-                                ?>
-                            </td>
-                            <td>
-                                <?php
-                                if( $biggestDiff > 0 ):
-                                    echo $biggestDiff, '%';
-                                endif;
-                                ?>
+                                <a href="channel.php?channel=<?php echo $player[ 'channel' ]; ?>" class="btn">
+                                    View
+                                </a>
                             </td>
                         </tr>
                         <?php

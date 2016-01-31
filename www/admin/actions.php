@@ -42,6 +42,22 @@ if( isset( $_GET[ 'delete' ] ) ):
     */
 endif;
 
+// Action for verifying a match
+if( isset( $_GET[ 'verify' ] ) ):
+    $id = 0 + $_GET[ 'verify' ];
+    $query = 'SELECT channel FROM matches WHERE id = :id LIMIT 1';
+    $PDO = Database::$connection->prepare( $query );
+    $PDO->bindValue( ':id', $id );
+    $PDO->execute();
+
+    $redirectChannel = $PDO->fetchColumn();
+    $query = 'UPDATE matches SET verified = 1, timestamp = timestamp WHERE id = :id LIMIT 1';
+    $PDO = Database::$connection->prepare( $query );
+    $PDO->bindValue( ':id', $id );
+
+    $PDO->execute();
+endif;
+
 // Action for setting stop/start of index
 if( !empty( $_POST ) && isset( $_POST[ 'should_index' ] ) ):
     $query = 'UPDATE players SET should_index = :shouldIndex WHERE channel = :channel LIMIT 1';

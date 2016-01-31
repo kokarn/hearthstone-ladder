@@ -52,7 +52,26 @@ function sortByChannel( $a, $b ){
 }
 
 function percentageDifference( $a, $b ){
-    return round( abs( ( 1 - $a / $b ) * 100 ) );
+    return round( 100 - ( min( $a, $b ) / max( $a, $b ) ) * 100 );
+}
+
+function isValidMatchDifferance( $match1, $match2 ){
+    // If the difference is less than 50% then it should be valid
+    if( percentageDifference( $match1->rank, $match2->rank ) < 50 ):
+        return true;
+    endif;
+
+    // If the total rank difference is less than 50 then it should be valid
+    if( abs( $match1->rank - $match2->rank ) < 50 ):
+        return true;
+    endif;
+
+    // If the second value is verified, it should be valid
+    if( $match2->verified ):
+        return true;
+    endif;
+
+    return false;
 }
 
 function deleteMatch( $id ){

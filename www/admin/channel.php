@@ -286,9 +286,6 @@ if( isset( $_GET[ 'channel' ] ) ):
                             Rank
                         </th>
                         <th>
-                            Diff
-                        </th>
-                        <th>
                             Dist
                         </th>
                         <th>
@@ -306,27 +303,20 @@ if( isset( $_GET[ 'channel' ] ) ):
 
                     $PDO->bindValue( ':channel', $_GET[ 'channel' ] );
                     $PDO->execute();
-                    $lastDigit = false;
+                    $lastMatch = false;
                     while( $data = $PDO->fetch() ):
                         $rowClass = '';
-                        if( $lastDigit !== false ):
-                            $diff = percentageDifference( $lastDigit, $data->rank );
-
-                            if( $diff > 100 ):
-                                $rowClass = 'table-danger';
-                            elseif( $diff > 40 ):
+                        if( $lastMatch !== false ):
+                            if( !isValidMatchDifferance( $lastMatch, $data ) ):
                                 $rowClass = 'table-warning';
                             endif;
-                        else :
-                            $diff = 0;
                         endif;
+
+                        $lastMatch = $data;
                         ?>
                         <tr class="<?php echo $rowClass; ?>">
                             <td>
                                 <?php echo $data->rank; ?>
-                            </td>
-                            <td>
-                                <?php echo $diff; ?>%
                             </td>
                             <td>
                                 <?php echo $data->distance; ?>
@@ -358,6 +348,9 @@ if( isset( $_GET[ 'channel' ] ) ):
                                                 <a href="channel.php?channel=<?php echo $data->channel; ?>" class="btn btn-info">
                                                     View
                                                 </a>
+                                                <a href="actions.php?verify=<?php echo $data->id; ?>&amp;redirect=channel" class="btn btn-success">
+                                                    Verify
+                                                </a>
                                                 <a href="actions.php?delete=<?php echo $data->id; ?>&amp;redirect=channel" class="btn btn-danger">
                                                     Delete
                                                 </a>
@@ -376,6 +369,9 @@ if( isset( $_GET[ 'channel' ] ) ):
                                     <button type="button" class="btn btn-info-outline" data-toggle="modal" data-target=".modal-<?php echo $data->id; ?>">
                                         View
                                     </button>
+                                    <a href="actions.php?verify=<?php echo $data->id; ?>&amp;redirect=channel" class="btn btn-success">
+                                        Verify
+                                    </a>
                                     <a href="actions.php?delete=<?php echo $data->id; ?>&amp;redirect=channel" class="btn btn-danger">
                                         Delete
                                     </a>
@@ -383,7 +379,6 @@ if( isset( $_GET[ 'channel' ] ) ):
                             </td>
                         </tr>
                         <?php
-                        $lastDigit = $data->rank;
                     endwhile;
                 ?>
                 </tbody>
