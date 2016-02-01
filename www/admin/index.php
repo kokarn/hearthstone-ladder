@@ -152,6 +152,11 @@ include( '../includes/default.php' );
                             endif;
                         endif;
 
+                        // If the channel is set to not index, we don't need to fix anything with it either
+                        if( $needsAttention && $player[ 'should_index' ] == 0 ):
+                            $needsAttention = false;
+                        endif;
+
                         if( !$needsAttention ):
                             continue;
                         endif;
