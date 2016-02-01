@@ -34,7 +34,7 @@ if( isset( $_GET[ 'channel' ] ) ) :
 
                 $bestMatch = false;
                 foreach( $matches as $rankMatch ):
-                    if( $rankMatch->isValid() && $rankMatch->getAsString() == $_GET[ 'find' ] ) :
+                    if( $rankMatch->isValid() && $rankMatch->getAsString() == $_GET[ 'set' ] ) :
                         $bestMatch = $rankMatch;
                         break;
                     endif;
@@ -80,6 +80,22 @@ if( isset( $_GET[ 'channel' ] ) ) :
                     $PDO->bindValue( ':id', $index );
                     $PDO->execute();
                 endif;
+            endif;
+        endif;
+    elseif( isset( $_GET[ 'set' ] ) && isset( $_GET[ 'image' ] ) ):
+        $parsedImage = str_replace( 'http://', '', $_GET[ 'image' ] );
+
+        // Check if the image is from the same http_host
+        if( substr( $parsedImage, 0, strlen( $_SERVER[ 'HTTP_HOST' ] ) ) == $_SERVER[ 'HTTP_HOST' ] ):
+            $filename = substr( $_GET[ 'image' ], strrpos( $_GET[ 'image' ], '/' ) + 1 );
+            $index = 0 + str_replace( '.jpg', '', $filename );
+
+            if( $index > 0 ):
+                $query = 'UPDATE matches SET rank = :rank, timestamp = timestamp WHERE id = :id LIMIT 1';
+                $PDO = Database::$connection->prepare( $query );
+                $PDO->bindValue( ':rank', $_GET[ 'set' ] );
+                $PDO->bindValue( ':id', $index );
+                $PDO->execute();
             endif;
         endif;
     endif;
@@ -359,7 +375,12 @@ if( isset( $_GET[ 'channel' ] ) ):
                                                 <form method="get" action="channel.php" class="form-inline pull-md-right m-l-1">
                                                     <input type="hidden" name="channel" value="<?php echo $_GET[ 'channel' ]; ?>">
                                                     <input type="hidden" name="image" value="http://<?php echo $_SERVER[ 'HTTP_HOST' ], str_replace( '/admin/channel.php', '/tmp/', $_SERVER[ 'PHP_SELF' ] ), $data->id; ?>.jpg">
-                                                    <input type="number" name="find" class="form-control" >
+                                                    <div class="checkbox">
+                                                        <label>
+                                                            <input type="checkbox" name="find"> Also find x/y
+                                                        </label>
+                                                    </div>
+                                                    <input type="number" name="set" class="form-control" >
                                                     <input type="submit" value="Re-detect" class="btn btn-success-outline">
                                                 </form>
                                             </div>
