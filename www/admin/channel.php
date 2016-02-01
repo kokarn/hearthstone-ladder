@@ -102,6 +102,11 @@ endif;
         ?>
     </title>
     <link rel="stylesheet" href="https://cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/css/bootstrap.css">
+    <style>
+        .row {
+            margin-bottom: 48px;
+        }
+    </style>
 </head>
 <body>
 <?php
