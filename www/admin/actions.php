@@ -58,7 +58,7 @@ if( isset( $_GET[ 'verify' ] ) ):
     $PDO->execute();
 endif;
 
-// Action for setting stop/start of index
+// Action for setting stop/start of channel indexing
 if( !empty( $_POST ) && isset( $_POST[ 'should_index' ] ) ):
     $query = 'UPDATE players SET should_index = :shouldIndex WHERE channel = :channel LIMIT 1';
     $PDO = Database::$connection->prepare( $query );
