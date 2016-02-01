@@ -350,9 +350,6 @@ if( isset( $_GET[ 'channel' ] ) ):
                                                 <span class="pull-md-left">
                                                     Detected as <?php echo $data->rank; ?>
                                                 </span>
-                                                <a href="channel.php?channel=<?php echo $data->channel; ?>" class="btn btn-info">
-                                                    View
-                                                </a>
                                                 <a href="actions.php?verify=<?php echo $data->id; ?>&amp;redirect=channel" class="btn btn-success">
                                                     Verify
                                                 </a>
