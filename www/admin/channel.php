@@ -34,7 +34,7 @@ if( isset( $_GET[ 'channel' ] ) ) :
 
                 $bestMatch = false;
                 foreach( $matches as $rankMatch ):
-                    if( $rankMatch->isValid() && $rankMatch->getAsString() == $_GET[ 'find' ] ) :
+                    if( $rankMatch->isValid() && $rankMatch->getAsString() == $_GET[ 'set' ] ) :
                         $bestMatch = $rankMatch;
                         break;
                     endif;
@@ -73,13 +73,29 @@ if( isset( $_GET[ 'channel' ] ) ) :
                 $index = 0 + str_replace( '.jpg', '', $filename );
 
                 if( $index > 0 ):
-                    $query = 'UPDATE matches SET rank = :rank WHERE id = :id LIMIT 1';
+                    $query = 'UPDATE matches SET rank = :rank, timestamp = timestamp WHERE id = :id LIMIT 1';
                     $PDO = Database::$connection->prepare( $query );
                     $newRank = $bestGuess->getAsString();
                     $PDO->bindValue( ':rank', $newRank );
                     $PDO->bindValue( ':id', $index );
                     $PDO->execute();
                 endif;
+            endif;
+        endif;
+    elseif( isset( $_GET[ 'set' ] ) && isset( $_GET[ 'image' ] ) ):
+        $parsedImage = str_replace( 'http://', '', $_GET[ 'image' ] );
+
+        // Check if the image is from the same http_host
+        if( substr( $parsedImage, 0, strlen( $_SERVER[ 'HTTP_HOST' ] ) ) == $_SERVER[ 'HTTP_HOST' ] ):
+            $filename = substr( $_GET[ 'image' ], strrpos( $_GET[ 'image' ], '/' ) + 1 );
+            $index = 0 + str_replace( '.jpg', '', $filename );
+
+            if( $index > 0 ):
+                $query = 'UPDATE matches SET rank = :rank, timestamp = timestamp WHERE id = :id LIMIT 1';
+                $PDO = Database::$connection->prepare( $query );
+                $PDO->bindValue( ':rank', $_GET[ 'set' ] );
+                $PDO->bindValue( ':id', $index );
+                $PDO->execute();
             endif;
         endif;
     endif;
@@ -102,6 +118,11 @@ endif;
         ?>
     </title>
     <link rel="stylesheet" href="https://cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/css/bootstrap.css">
+    <style>
+        .row {
+            margin-bottom: 48px;
+        }
+    </style>
 </head>
 <body>
 <?php
@@ -263,7 +284,7 @@ if( isset( $_GET[ 'channel' ] ) ):
             >
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
-                        <img src="<?php echo $url; ?>" style="max-width: 100%;">
+                        <img data-src="<?php echo $url; ?>" style="max-width: 100%;">
                     </div>
                 </div>
             </div>
@@ -286,9 +307,6 @@ if( isset( $_GET[ 'channel' ] ) ):
                             Rank
                         </th>
                         <th>
-                            Diff
-                        </th>
-                        <th>
                             Dist
                         </th>
                         <th>
@@ -306,27 +324,20 @@ if( isset( $_GET[ 'channel' ] ) ):
 
                     $PDO->bindValue( ':channel', $_GET[ 'channel' ] );
                     $PDO->execute();
-                    $lastDigit = false;
+                    $lastMatch = false;
                     while( $data = $PDO->fetch() ):
                         $rowClass = '';
-                        if( $lastDigit !== false ):
-                            $diff = percentageDifference( $lastDigit, $data->rank );
-
-                            if( $diff > 100 ):
-                                $rowClass = 'table-danger';
-                            elseif( $diff > 40 ):
+                        if( $lastMatch !== false ):
+                            if( !isValidMatchDifferance( $lastMatch, $data ) ):
                                 $rowClass = 'table-warning';
                             endif;
-                        else :
-                            $diff = 0;
                         endif;
+
+                        $lastMatch = $data;
                         ?>
                         <tr class="<?php echo $rowClass; ?>">
                             <td>
                                 <?php echo $data->rank; ?>
-                            </td>
-                            <td>
-                                <?php echo $diff; ?>%
                             </td>
                             <td>
                                 <?php echo $data->distance; ?>
@@ -342,13 +353,21 @@ if( isset( $_GET[ 'channel' ] ) ):
                                 >
                                     <div class="modal-dialog modal-lg">
                                         <div class="modal-content">
-                                            <img src="../tmp/<?php echo $data->id; ?>.jpg" style="max-width: 100%">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                                <h4 class="modal-title">
+                                                    <?php echo htmlentities( $data->status ); ?>
+                                                </h4>
+                                            </div>
+                                            <img data-src="../tmp/<?php echo $data->id; ?>.jpg" style="max-width: 100%">
                                             <div class="modal-footer">
                                                 <span class="pull-md-left">
                                                     Detected as <?php echo $data->rank; ?>
                                                 </span>
-                                                <a href="channel.php?channel=<?php echo $data->channel; ?>" class="btn btn-info">
-                                                    View
+                                                <a href="actions.php?verify=<?php echo $data->id; ?>&amp;redirect=channel" class="btn btn-success">
+                                                    Verify
                                                 </a>
                                                 <a href="actions.php?delete=<?php echo $data->id; ?>&amp;redirect=channel" class="btn btn-danger">
                                                     Delete
@@ -356,7 +375,12 @@ if( isset( $_GET[ 'channel' ] ) ):
                                                 <form method="get" action="channel.php" class="form-inline pull-md-right m-l-1">
                                                     <input type="hidden" name="channel" value="<?php echo $_GET[ 'channel' ]; ?>">
                                                     <input type="hidden" name="image" value="http://<?php echo $_SERVER[ 'HTTP_HOST' ], str_replace( '/admin/channel.php', '/tmp/', $_SERVER[ 'PHP_SELF' ] ), $data->id; ?>.jpg">
-                                                    <input type="number" name="find" class="form-control" >
+                                                    <div class="checkbox">
+                                                        <label>
+                                                            <input type="checkbox" name="find"> Also find x/y
+                                                        </label>
+                                                    </div>
+                                                    <input type="number" name="set" class="form-control" >
                                                     <input type="submit" value="Re-detect" class="btn btn-success-outline">
                                                 </form>
                                             </div>
@@ -368,6 +392,9 @@ if( isset( $_GET[ 'channel' ] ) ):
                                     <button type="button" class="btn btn-info-outline" data-toggle="modal" data-target=".modal-<?php echo $data->id; ?>">
                                         View
                                     </button>
+                                    <a href="actions.php?verify=<?php echo $data->id; ?>&amp;redirect=channel" class="btn btn-success">
+                                        Verify
+                                    </a>
                                     <a href="actions.php?delete=<?php echo $data->id; ?>&amp;redirect=channel" class="btn btn-danger">
                                         Delete
                                     </a>
@@ -375,7 +402,6 @@ if( isset( $_GET[ 'channel' ] ) ):
                             </td>
                         </tr>
                         <?php
-                        $lastDigit = $data->rank;
                     endwhile;
                 ?>
                 </tbody>
@@ -392,3 +418,12 @@ endif;
 ?>
 <script src="https://cdn.jsdelivr.net/jquery/2.2.0/jquery.min.js"></script>
 <script src="https://cdn.rawgit.com/twbs/bootstrap/v4-dev/dist/js/bootstrap.min.js"></script>
+<script>
+$(function(){
+    $( document ).on( 'show.bs.modal', function( event ){
+        $( event.target ).find( 'img' ).each( function( index, element ){
+            $( element ).attr( 'src', $( element ).data( 'src' ) );
+        });
+    })
+});
+</script>

@@ -77,7 +77,7 @@ include( '../includes/default.php' );
     <div class="row">
         <div class="col-md-4">
             <h1 class="display-4">
-                Players
+                Needs action
             </h1>
             <table class="table table-striped table-sm table-hover">
                 <thead>
@@ -89,10 +89,7 @@ include( '../includes/default.php' );
                             Real name
                         </th>
                         <th>
-                            Indexing
-                        </th>
-                        <th>
-                            Biggest diff
+                            View
                         </th>
                     </tr>
                 </thead>
@@ -106,8 +103,7 @@ include( '../includes/default.php' );
                         status,
                         name,
                         players.should_index,
-                        players.x,
-                        players.y
+                        verified
                         FROM
                             matches
                         LEFT JOIN
@@ -126,8 +122,6 @@ include( '../includes/default.php' );
                                 'channel' => $row->channel,
                                 'name' => $row->name,
                                 'should_index' => $row->should_index,
-                                'x' => $row->x,
-                                'y' => $row->y,
                                 'matches' => array()
                             );
                         endif;
@@ -140,60 +134,44 @@ include( '../includes/default.php' );
                             continue;
                         endif;
 
-                        $biggestDiff = false;
+                        $needsAttention = false;
                         foreach( $player[ 'matches' ] as $index => $match ):
                             if( $index == 0 ):
                                 continue;
                             endif;
 
-                            $currentDiff = percentageDifference( $player[ 'matches' ][ $index - 1 ]->rank, $player[ 'matches' ][ $index ]->rank );
-
-                            if( $biggestDiff === false || ( $currentDiff > $biggestDiff ) ):
-                                $biggestDiff = $currentDiff;
+                            if( !isValidMatchDifferance( $player[ 'matches' ][ $index - 1 ], $player[ 'matches' ][ $index ] ) ):
+                                $needsAttention = true;
+                                break;
                             endif;
                         endforeach;
 
-                        if( $biggestDiff > 100 ):
-                            ?>
-                            <tr class="table-danger">
-                            <?php
-                        else:
-                            ?>
-                            <tr>
-                            <?php
+                        if( !$needsAttention ):
+                            if( empty( $player[ 'name' ] ) ):
+                                $needsAttention = true;
+                            endif;
+                        endif;
+
+                        // If the channel is set to not index, we don't need to fix anything with it either
+                        if( $needsAttention && $player[ 'should_index' ] == 0 ):
+                            $needsAttention = false;
+                        endif;
+
+                        if( !$needsAttention ):
+                            continue;
                         endif;
                         ?>
+                        <tr>
                             <td>
-                                <a href="channel.php?channel=<?php echo $player[ 'channel' ]; ?>">
-                                    <?php echo $player[ 'channel' ]; ?>
-                                </a>
+                                <?php echo $player[ 'channel' ]; ?>
                             </td>
                             <td>
                                 <?php echo $player[ 'name' ]; ?>
                             </td>
                             <td>
-                                <?php
-                                if( $player[ 'should_index' ] ):
-                                    ?>
-                                    <span class="label label-success">
-                                        Yes
-                                    </span>
-                                    <?php
-                                else:
-                                    ?>
-                                    <span class="label label-danger">
-                                        No
-                                    </span>
-                                    <?php
-                                endif;
-                                ?>
-                            </td>
-                            <td>
-                                <?php
-                                if( $biggestDiff > 0 ):
-                                    echo $biggestDiff, '%';
-                                endif;
-                                ?>
+                                <a href="channel.php?channel=<?php echo $player[ 'channel' ]; ?>">
+                                    View
+                                </a>
                             </td>
                         </tr>
                         <?php
@@ -210,7 +188,7 @@ include( '../includes/default.php' );
                 <thead>
                     <tr>
                         <th>
-                            Channel
+                            Player
                         </th>
                         <th>
                             Rank
@@ -225,7 +203,7 @@ include( '../includes/default.php' );
                             Status
                         </th>
                         <th>
-                            Detect
+                            Channel
                         </th>
                         <th>
                             Delete
@@ -259,5 +237,11 @@ include( '../includes/default.php' );
         $( '.js-channel-select' ).on( 'change', function( event ){
             $( this ).parent( 'form' ).submit();
         });
+
+        $( document ).on( 'show.bs.modal', function( event ){
+            $( event.target ).find( 'img' ).each( function( index, element ){
+                $( element ).attr( 'src', $( element ).data( 'src' ) );
+            });
+        })
     });
 </script>
