@@ -73,6 +73,7 @@ CharacterFinder.prototype.onImgLoad = function(){
     var correct = 0;
     var numberShapes = [];
     var resultingNumbers = [];
+    var validShapes = 0;
 
     this.context.drawImage( this.img, 0, this.img.height - this.ypos, this.width, this.height, 0, 0, this.width, this.height );
 
@@ -104,7 +105,7 @@ CharacterFinder.prototype.onImgLoad = function(){
         }
 
         if( boundaries.ymin != 0 && boundaries.xmax - boundaries.xmin < 25 ){
-
+            validShapes = validShapes + 1;
             this.drawRect( boundaries.xmin - 2, boundaries.ymin - 2, boundaries.xmax + 2, boundaries.ymax + 2, '#f00' );
             correct = correct + 1;
 
@@ -134,14 +135,50 @@ CharacterFinder.prototype.onImgLoad = function(){
 
             }
 
-            resultingNumbers.push( bestAnswer );
+            // Check the minimum pixel area needed for each number
+            if( bestAnswer === 0 && numberShapes[ i ].length < 130 ) {
+                bestAnswer = null;
+            } else if( bestAnswer === 1 && numberShapes[ i ].length < 120 ){
+                bestAnswer = null;
+            } else if( bestAnswer === 2 && numberShapes[ i ].length < 140 ){
+                bestAnswer = null;
+            } else if( bestAnswer === 3 && numberShapes[ i ].length < 170 ){
+                bestAnswer = null;
+            } else if( bestAnswer === 4 && numberShapes[ i ].length < 140 ){
+                bestAnswer = null;
+            } else if( bestAnswer === 5 && numberShapes[ i ].length < 170 ){
+                bestAnswer = null;
+            } else if( bestAnswer === 6 && numberShapes[ i ].length < 222 ){
+                bestAnswer = null;
+            } else if( bestAnswer === 7 && numberShapes[ i ].length < 150 ){
+                bestAnswer = null;
+            } else if( bestAnswer === 8 && numberShapes[ i ].length < 170 ){
+                bestAnswer = null;
+            } else if( bestAnswer === 9 && numberShapes[ i ].length < 220 ){
+                bestAnswer = null;
+            }
 
-            this.drawPixels( getNumberAsNurb( bestAnswer, boundaries.xmin + 1 , boundaries.ymin + 1, boundaries.xmax - boundaries.xmin - 2, boundaries.ymax - boundaries.ymin - 2 ), '#00f' );
+            if( bestAnswer !== null ){
+                resultingNumbers.push( bestAnswer );
+                this.drawPixels( getNumberAsNurb( bestAnswer, boundaries.xmin + 1 , boundaries.ymin + 1, boundaries.xmax - boundaries.xmin - 2, boundaries.ymax - boundaries.ymin - 2 ), '#00f' );
+            }
         }
     }
 
-    for( var i = 0, l = this.onCompleteCallbacks.length; i < l; i = i + 1 ){
-        this.onCompleteCallbacks[ i ].bind( this )( this.filePath, parseInt( resultingNumbers.join('') ) );
+    if( resultingNumbers.length === 0 ){
+        // Fallback to false if we match nothing
+        resultingNumbers = false;
+    } else if( resultingNumbers.length !== validShapes ){
+        // Fallback to false if we don't match all the numbers we should
+        resultingNumbers = false;
+    }
+
+    for( var i = 0, l = this.onCompleteCallbacks.length; i < l; i++){
+        if( resultingNumbers ){
+            this.onCompleteCallbacks[ i ].bind( this )( this.filePath, parseInt(resultingNumbers.join('')) );
+        } else {
+            this.onCompleteCallbacks[ i ].bind( this )( this.filePath, resultingNumbers );
+        }
     }
 }
 
