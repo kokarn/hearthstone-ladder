@@ -59,7 +59,6 @@ CharacterFinder.prototype.setImg = function( inputImageData ){
     this.context = this.canvas.getContext( '2d' );
 
     this.ypos = 185;
-    this.contrastLimit = 140;
 
     this.onImgLoad();
 };
@@ -149,6 +148,7 @@ CharacterFinder.prototype.saveMatchImage = function( filename ){
     });
 };
 
+/*
 CharacterFinder.prototype.contrast = function(){
     var self = this;
 
@@ -160,6 +160,7 @@ CharacterFinder.prototype.contrast = function(){
         }
     });
 };
+*/
 
 CharacterFinder.prototype.drawPixel = function( x, y, color ){
     this.context.fillStyle = color || '#FFF';
@@ -260,11 +261,14 @@ CharacterFinder.prototype.drawRect = function( x1, y1, x2, y2, color ){
     this.context.strokeRect( x1, y1, x2 - x1, y2 - y1 );
 }
 
+/*
 CharacterFinder.prototype.getPixelIntensity = function( x, y ){
     var color = this.getPixelColor( x, y );
     return intensity( color.r, color.g, color.b );
 }
+*/
 
+/*
 CharacterFinder.prototype.diff = function( refcanvas ){
     var sum = 0;
     var num = 0;
@@ -278,6 +282,7 @@ CharacterFinder.prototype.diff = function( refcanvas ){
 
     return sum;
 }
+*/
 
 CharacterFinder.prototype.onComplete = function( fn ){
     this.onCompleteCallbacks.push( fn );
