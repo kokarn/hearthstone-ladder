@@ -32,6 +32,8 @@ var CharacterFinder = function( filePath, width, height ){
 
         response.on( 'end', function() {
             _this.setImg( data.read() );
+
+            data = null;
         });
     });
 
@@ -48,12 +50,15 @@ var CharacterFinder = function( filePath, width, height ){
         }
 
         _this.setImg( imageData );
+        imageData = null;
     });
 };
 
 CharacterFinder.prototype.setImg = function( inputImageData ){
     this.img = new Image;
     this.img.src = inputImageData;
+
+    inputImageData = null;
 
     this.canvas = new Canvas( this.width, this.height );
     this.context = this.canvas.getContext( '2d' );
