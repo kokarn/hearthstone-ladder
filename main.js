@@ -1,5 +1,7 @@
 'use strict';
 
+let chalk = require( 'chalk' );
+
 let CharacterFinder = require( './modules/CharacterFinder.js' );
 let twitch = require( './modules/Twitch.js' );
 let imageBaseUrl = 'http://static-cdn.jtvnw.net/previews-ttv/live_user_{channel}-{width}x{height}.jpg';
@@ -20,7 +22,11 @@ function startDetection( channel ){
     detectionsStarted = detectionsStarted + 1;
 
     finder.onComplete( function( file, result ){
-        console.log( file + ' matched as ' + result );
+        if( result ){
+            console.log( chalk.green( file + ' matched as ' + result ) );
+        } else {
+            console.log( chalk.red( file + ' matched as ' + result ) );
+        }
         detectionsDone = detectionsDone + 1;
 
         finder = null;

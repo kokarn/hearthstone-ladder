@@ -41,9 +41,10 @@
     "xhr": "^2.2.0"
   },
   "dependencies": {
-    "verb-nurbs": "~2.0.0",
     "canvas": "~1.3.9",
-    "webworker-threads": "~0.6.2",
-    "request": "~2.69.0"
+    "chalk": "^1.1.1",
+    "request": "~2.69.0",
+    "verb-nurbs": "~2.0.0",
+    "webworker-threads": "~0.6.2"
   }
 }
