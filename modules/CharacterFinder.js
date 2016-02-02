@@ -123,7 +123,6 @@ CharacterFinder.prototype.onImgLoad = function(){
                 for(var k = 0, len = curve.length; k < len; k++ ){
 
                     var pixelColor = this.getPixelColor( Math.round(curve[ k ].x), Math.round(curve[ k ].y) );
-                    var diff = colorDiff( pixelColor, { r: 0, g: 255, b: 0 } ) / 255;
 
                     sum += colorDiff( pixelColor, { r: 0, g: 255, b: 0 } ) / 255;
                 }
