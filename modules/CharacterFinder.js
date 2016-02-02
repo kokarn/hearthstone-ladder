@@ -31,6 +31,7 @@ var CharacterFinder = function( filePath, width, height ){
         });
 
         response.on( 'end', function() {
+            console.log( filePath );
             _this.setImg( data.read() );
 
             data = null;
