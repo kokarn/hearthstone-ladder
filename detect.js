@@ -1,6 +1,7 @@
 'use strict';
 
 let chalk = require( 'chalk' );
+let mkdirp = require( 'mkdirp' );
 
 let CharacterFinder = require( './modules/CharacterFinder.js' );
 let twitch = require( './modules/Twitch.js' );
@@ -11,6 +12,13 @@ let detectionsRunningLimit = 25;
 let twitchData;
 let streamsPerBatch = 25;
 let currentBatch = 0;
+let imagePath;
+
+function pad(n, width, z) {
+    z = z || '0';
+    n = n + '';
+    return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+}
 
 function getTwitchImageUrl( channel, width, height ){
     return imageBaseUrl
@@ -20,7 +28,7 @@ function getTwitchImageUrl( channel, width, height ){
 }
 
 function startDetection( channel ){
-    var finder = new CharacterFinder( getTwitchImageUrl( channel, 1920, 1080 ), 145, 60 );
+    var finder = new CharacterFinder( getTwitchImageUrl( channel, 1920, 1080 ), 145, 80 );
     detectionsStarted = detectionsStarted + 1;
 
     finder.onComplete( function( file, result ){
@@ -29,6 +37,8 @@ function startDetection( channel ){
         } else {
             console.log( chalk.red( file + ' matched as ' + result ) );
         }
+
+        finder.saveMatchImage( imagePath + '/' + channel + '.jpg' );
 
         detectionsDone = detectionsDone + 1;
 
@@ -67,6 +77,11 @@ function loadStreamsBatch( index ){
             throw error;
         }
 
+        if( response === null ){
+            console.log( chalk.red( 'Failed to load twitch data' ) );
+            return false;
+        }
+
         console.log( 'Done with api request' );
         twitchData = response;
         detectionsStarted = 0;
@@ -78,6 +93,12 @@ function loadStreamsBatch( index ){
     });
 }
 
+var date = new Date();
+imagePath = 'www/tmp/' + date.getFullYear() + '-' + ( pad( date.getMonth() + 1, 2 ) ) + '-' + pad( date.getDate(), 2 ) + '-' + pad( date.getHours(), 2 ) + pad( date.getMinutes(), 2 );
+mkdirp( imagePath, function( error ){
+    if( error ){
+        throw new Error( error );
+    }
 
-
-loadStreamsBatch( currentBatch );
+    loadStreamsBatch( currentBatch );
+});
