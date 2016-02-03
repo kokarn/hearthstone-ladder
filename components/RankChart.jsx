@@ -61,7 +61,7 @@ class RankChart extends React.Component {
 
     loadChannelData(){
         xhr({
-            uri: 'get.php?channel=' + this.props.channel,
+            uri: 'data/' + this.props.channel,
             headers: {
                 'Content-Type': 'application/json'
             },

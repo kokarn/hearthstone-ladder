@@ -60,7 +60,7 @@ class RankTable extends React.Component {
         clearTimeout( this.updateDataTimeout );
 
         xhr({
-            uri: 'get.php',
+            uri: 'data',
             headers: {
                 'Content-Type': 'application/json'
             },
