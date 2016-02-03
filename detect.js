@@ -7,8 +7,10 @@ let twitch = require( './modules/Twitch.js' );
 let imageBaseUrl = 'http://static-cdn.jtvnw.net/previews-ttv/live_user_{channel}-{width}x{height}.jpg';
 let detectionsStarted = 0;
 let detectionsDone = 0;
-let detectionsRunningLimit = 50;
+let detectionsRunningLimit = 25;
 let twitchData;
+let streamsPerBatch = 25;
+let currentBatch = 0;
 
 function getTwitchImageUrl( channel, width, height ){
     return imageBaseUrl
@@ -27,9 +29,15 @@ function startDetection( channel ){
         } else {
             console.log( chalk.red( file + ' matched as ' + result ) );
         }
+
         detectionsDone = detectionsDone + 1;
 
         finder = null;
+
+        if( detectionsDone === streamsPerBatch ){
+            currentBatch = currentBatch + 1;
+            loadStreamsBatch( currentBatch );
+        }
     });
 }
 
@@ -51,18 +59,25 @@ function startDetectionByIndex( index ){
     }
 }
 
+function loadStreamsBatch( index ){
+    console.log( 'Loading Hearthstone streams' );
+    let offset = index * streamsPerBatch;
+    twitch( 'streams?game=Hearthstone:%20Heroes%20of%20Warcraft&limit=' + streamsPerBatch + '&offset=' + offset, function( error, response ){
+        if( error ){
+            throw error;
+        }
+
+        console.log( 'Done with api request' );
+        twitchData = response;
+        detectionsStarted = 0;
+        detectionsDone = 0;
+
+        for( let i = 0; i < detectionsRunningLimit; i = i + 1 ){
+            startDetectionByIndex( i );
+        }
+    });
+}
 
 
-console.log( 'Loading Hearthstone streams' );
-twitch( 'streams?game=Hearthstone:%20Heroes%20of%20Warcraft&limit=100', function( error, response ){
-    if( error ){
-        throw error;
-    }
 
-    console.log( 'Done with api request' );
-    twitchData = response;
-
-    for( let i = 0; i < detectionsRunningLimit; i = i + 1 ){
-        startDetectionByIndex( i );
-    }
-});
+loadStreamsBatch( currentBatch );
