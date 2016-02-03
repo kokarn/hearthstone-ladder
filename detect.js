@@ -2,6 +2,7 @@
 
 let chalk = require( 'chalk' );
 let mkdirp = require( 'mkdirp' );
+let mysql = require( 'mysql' );
 
 let CharacterFinder = require( './modules/CharacterFinder.js' );
 let twitch = require( './modules/Twitch.js' );
@@ -20,6 +21,30 @@ function pad(n, width, z) {
     return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
 }
 
+function saveMatch( rank, channel, status ){
+    var connection = mysql.createConnection({
+        host : 'localhost',
+        user : 'root',
+        port: 8889,
+        password : 'root',
+        database : 'hearthstone_legends'
+    });
+
+    var insertData = [ channel, rank, status ];
+
+    connection.connect();
+
+    connection.query( `INSERT INTO matches ( channel, rank, status ) VALUES ( ?, ?, ?, ? )`, insertData, function( error, rows, fields ){
+        if( error ) {
+            throw error;
+        }
+
+        console.log( chalk.green( channel + '@' + rank + ' - ' + status + ' STORED' ) );
+    });
+
+    connection.end();
+}
+
 function getTwitchImageUrl( channel, width, height ){
     return imageBaseUrl
         .replace( '{channel}', channel )
@@ -28,12 +53,13 @@ function getTwitchImageUrl( channel, width, height ){
 }
 
 function startDetection( channel ){
-    var finder = new CharacterFinder( getTwitchImageUrl( channel, 1920, 1080 ), 145, 80 );
+    var finder = new CharacterFinder( getTwitchImageUrl( channel.name, 1920, 1080 ), 145, 80 );
     detectionsStarted = detectionsStarted + 1;
 
     finder.onComplete( function( file, result ){
         if( result ){
             console.log( chalk.green( file + ' matched as ' + result ) );
+            saveMatch( result, channel.name, channel.status );
         } else {
             console.log( chalk.red( file + ' matched as ' + result ) );
         }
@@ -63,7 +89,7 @@ function startDetectionByIndex( index ){
     if( detectionsStarted < twitchData.streams.length ){
         process.nextTick(() => {
             if( twitchData.streams[ index ] ){
-                startDetection( twitchData.streams[ index ].channel.name );
+                startDetection( twitchData.streams[ index ].channel );
             }
         });
     }
