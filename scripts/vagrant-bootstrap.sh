@@ -3,6 +3,9 @@
 # Update all repos
 apt-get update
 
+# Upgrade everything already installed
+apt-get upgrade
+
 # Install node
 sudo curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
 sudo apt-get install -y nodejs
