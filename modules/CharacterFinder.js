@@ -106,9 +106,10 @@ CharacterFinder.prototype.onImgLoad = function(){
         }
 
         if(
+            boundaries.ymin !== 0 &&
             boundaries.xmax - boundaries.xmin < 25 &&
-            ( boundaries.ymax - boundaries.ymin ) / ( boundaries.xmax - boundaries.xmin ) > 1.1 &&
-            ( boundaries.ymax - boundaries.ymin ) / ( boundaries.xmax - boundaries.xmin ) < 2
+            ( boundaries.ymax - boundaries.ymin ) / ( boundaries.xmax - boundaries.xmin ) > 1.15 &&
+            ( boundaries.ymax - boundaries.ymin ) / ( boundaries.xmax - boundaries.xmin ) < 1.9
         ){
             validShapes = validShapes + 1;
             this.drawRect( boundaries.xmin - 2, boundaries.ymin - 2, boundaries.xmax + 2, boundaries.ymax + 2, '#f00' );
@@ -121,7 +122,6 @@ CharacterFinder.prototype.onImgLoad = function(){
 
             var canvasData = this.context.getImageData( 0, 0, this.width, this.height ).data;
             for( var j = 0; j < 10; j++ ){
-
                 var sum = 0;
 
                 var curve = getNumberAsNurb( j, boundaries.xmin + 1 , boundaries.ymin + 1, boundaries.xmax - boundaries.xmin - 2, boundaries.ymax - boundaries.ymin - 2 );
@@ -256,7 +256,7 @@ CharacterFinder.prototype.traceAreaStepColor = function( startx, starty, color, 
             y: starty
         } );
 
-        if( startx + 1 <= this.width ){
+        if( index.indexOf( ( startx + 1 ) + ',' + ( starty ) ) === -1 ){
             result = result.concat( this.traceAreaStepColor( startx + 1, starty, color, index, canvasData ) );
         }
 
@@ -264,7 +264,7 @@ CharacterFinder.prototype.traceAreaStepColor = function( startx, starty, color, 
             return result;
         }
 
-        if( starty + 1 <= this.height ){
+        if( index.indexOf( ( startx ) + ',' + ( starty + 1 ) ) === -1 ){
             result = result.concat( this.traceAreaStepColor( startx, starty + 1, color, index, canvasData ) );
         }
 
@@ -272,7 +272,7 @@ CharacterFinder.prototype.traceAreaStepColor = function( startx, starty, color, 
             return result;
         }
 
-        if( startx - 1 >= 0 ){
+        if( index.indexOf( ( startx - 1 ) + ',' + ( starty ) ) === -1 ){
             result = result.concat( this.traceAreaStepColor( startx - 1, starty, color, index, canvasData ) );
         }
 
@@ -280,7 +280,7 @@ CharacterFinder.prototype.traceAreaStepColor = function( startx, starty, color, 
             return result;
         }
 
-        if( starty - 1 >= 0 ){
+        if( index.indexOf( ( startx ) + ',' + ( starty - 1 ) ) === -1 ){
             result = result.concat( this.traceAreaStepColor( startx, starty - 1, color, index, canvasData ) );
         }
     }
@@ -302,10 +302,6 @@ CharacterFinder.prototype.onPixels = function( fn, data ){
 }
 
 CharacterFinder.prototype.getPixelColor = function( x, y, data ){
-    if( x > this.width || y > this.height ){
-        return false;
-    }
-
     var returnData = {
         r: data[ ( ( this.canvas.width * y ) + x ) * 4 ],
         g: data[ ( ( this.canvas.width * y ) + x ) * 4 + 1 ],
