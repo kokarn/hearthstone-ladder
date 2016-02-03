@@ -23,6 +23,9 @@ var CharacterFinder = function( filePath, width, height ){
 
         if( response.statusCode !== 200 ){
             console.log( 'Unable to load file', filePath, ' Its probably not online anymore' );
+            for( var i = 0, l = _this.onCompleteCallbacks.length; i < l; i++){
+                _this.onCompleteCallbacks[ i ].bind( _this )( _this.filePath, false );
+            }
             return false;
         }
 
