@@ -7,7 +7,8 @@ module.exports = function( grunt ) {
         watch: {
             react: {
                 files: 'components/*.jsx',
-                tasks: [ 'env:dev', 'eslint:components', 'browserify' ]
+                // tasks: [ 'env:dev', 'eslint:components', 'browserify' ]
+                tasks: [ 'eslint:components', 'browserify', 'uglify' ]
             }
         },
 
@@ -46,50 +47,8 @@ module.exports = function( grunt ) {
             dev : {
                 NODE_ENV : 'development'
             }
-        },
-
-        'sftp-deploy': {
-            default: {
-                auth: {
-                    host: 'kokarn.com',
-                    port: 22,
-                    authKey: 'hearthstone-legends'
-                },
-                cache: 'sftpCache.json',
-                src: './www/',
-                dest: '/var/www/hearthstone-legends/',
-                exclusions: [
-                    '.DS_Store',
-                    'node_modules',
-                    'data',
-                    'components',
-                    'sftpCache.json',
-                    '.gitignore',
-                    '.ftppass',
-                    'Gruntfile.js',
-                    './scripts/app.built.js',
-                    'README.md',
-                    'package.json',
-                    'tmp',
-                    'comparisons',
-                    'position-index.json',
-                    'hash-index.json',
-                    'dev.html'
-                ],
-                serverSep: '/',
-                localSep: '/',
-                concurrency: 4,
-                progress: true
-            }
         }
     });
 
     require( 'load-grunt-tasks' )( grunt );
-
-    grunt.registerTask( 'deploy', [
-        'eslint:components',
-        'browserify',
-        'uglify',
-        'sftp-deploy'
-    ] );
 };
