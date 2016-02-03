@@ -244,7 +244,11 @@ CharacterFinder.prototype.traceAreaStepColor = function( startx, starty, color, 
 
     var result = [];
 
-    if( colorDiff( color, this.getPixelColor( startx, starty, canvasData ) ) < 45 && index.indexOf( startx + ',' + starty ) === -1 && index.length < 2500 ){
+    if(
+        colorDiff( color, this.getPixelColor( startx, starty, canvasData ) ) < 50 &&
+        index.indexOf( startx + ',' + starty ) === -1 &&
+        index.length < 2000
+    ){
         index.push( startx + ',' + starty );
 
         result.push( {
@@ -252,28 +256,32 @@ CharacterFinder.prototype.traceAreaStepColor = function( startx, starty, color, 
             y: starty
         } );
 
-        if( index.indexOf( ( startx + 1 ) + ',' + ( starty ) ) === -1 ){
-            if( startx + 1 <= this.width ){
-                result = result.concat( this.traceAreaStepColor( startx + 1, starty, color, index, canvasData ) );
-            }
+        if( startx + 1 <= this.width ){
+            result = result.concat( this.traceAreaStepColor( startx + 1, starty, color, index, canvasData ) );
         }
 
-        if( index.indexOf( ( startx ) + ',' + ( starty + 1 ) ) === -1 ) {
-            if( starty + 1 <= this.height ){
-                result = result.concat( this.traceAreaStepColor( startx, starty + 1, color, index, canvasData ) );
-            }
+        if( result.length > 400 ){
+            return result;
         }
 
-        if( index.indexOf( ( startx - 1 ) + ',' + ( starty ) ) === -1 ){
-            if( startx - 1 >= 0 ){
-                result = result.concat( this.traceAreaStepColor( startx - 1, starty, color, index, canvasData ) );
-            }
+        if( starty + 1 <= this.height ){
+            result = result.concat( this.traceAreaStepColor( startx, starty + 1, color, index, canvasData ) );
         }
 
-        if( index.indexOf( ( startx ) + ',' + ( starty - 1 ) ) === -1 ) {
-            if( starty - 1 >= 0 ){
-                result = result.concat( this.traceAreaStepColor( startx, starty - 1, color, index, canvasData ) );
-            }
+        if( result.length > 400 ){
+            return result;
+        }
+
+        if( startx - 1 >= 0 ){
+            result = result.concat( this.traceAreaStepColor( startx - 1, starty, color, index, canvasData ) );
+        }
+
+        if( result.length > 400 ){
+            return result;
+        }
+
+        if( starty - 1 >= 0 ){
+            result = result.concat( this.traceAreaStepColor( startx, starty - 1, color, index, canvasData ) );
         }
     }
 
