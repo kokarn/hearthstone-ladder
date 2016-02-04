@@ -3,7 +3,7 @@
         "name" : "webserver",
         "script" : "server.js",
         "watch" : true,
-        "ignore_watch": [ "tmp" ],
+        "ignore_watch": [ "www/tmp" ],
         "merge_logs" : true
     },{
         "name" : "detector",
