@@ -1,0 +1,16 @@
+{
+    "apps" : [{
+        "name" : "webserver",
+        "script" : "server.js",
+        "watch" : true,
+        "ignore_watch": [ "tmp" ],
+        "merge_logs" : true
+    },{
+        "name" : "detector",
+        "script" : "detector.js",
+        "exec_mode": "cluster",
+        "instances": 1,
+        "cron_restart": "*/5 * * * *",
+        "merge_logs" : true
+    }]
+}
