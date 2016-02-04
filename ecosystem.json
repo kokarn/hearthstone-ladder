@@ -7,7 +7,7 @@
         "merge_logs" : true
     },{
         "name" : "detector",
-        "script" : "detector.js",
+        "script" : "detect.js",
         "exec_mode": "cluster",
         "instances": 1,
         "cron_restart": "*/5 * * * *",
