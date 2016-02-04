@@ -8,6 +8,8 @@
     },{
         "name" : "detector",
         "script" : "detect.js",
+        "instances" : 1,
+        "exec_mode" : "cluster_mode",
         "cron_restart": "0-59/5 * * * *",
         "merge_logs" : true
     }]
