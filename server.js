@@ -6,9 +6,9 @@ var mysql = require( 'mysql' );
 var fs = require( 'fs' );
 var path = require( 'path' );
 
-app.use( express.static( 'www' ) );
 var config = require( './config.js' );
 
+app.use( express.static( path.join( __dirname, '/www' ) ) );
 
 app.get( '/data/*', function( request, response ){
     var connection = mysql.createConnection({
@@ -113,14 +113,21 @@ app.get( '/data', function( request, response ){
 });
 
 app.get( '/check', function( request, response ){
-    var rootPath = 'www/tmp/';
+    var rootPath = __dirname + '/www/tmp/';
     var htmlResponse = '<ul>';
+    var validFolders = [];
 
     fs.readdirSync( rootPath ).filter( function( file ){
         if( fs.statSync( path.join( rootPath, file ) ).isDirectory() ){
-            htmlResponse = htmlResponse + '<li><a href="/check/' + file + '">' + file + '</a></li>';
+            validFolders.push( file );
         }
     });
+
+    validFolders.reverse();
+
+    for( var i = 0; i < validFolders.length; i = i + 1 ){
+        htmlResponse = htmlResponse + '<li><a href="/check/' + validFolders[ i ] + '">' + validFolders[ i ] + '</a></li>';
+    }
 
     htmlResponse = htmlResponse + '</ul>';
 
@@ -129,11 +136,11 @@ app.get( '/check', function( request, response ){
 
 app.get( '/check/*', function( request, response ){
     var htmlResponse = '';
-    var probablePath = path.join( 'www/tmp/', request.params[ 0 ] );
+    var probablePath = path.join( __dirname + '/www/tmp/', request.params[ 0 ] );
 
     if( fs.statSync( probablePath ).isDirectory() ){
         var images = fs.readdirSync( probablePath );
-        var imageBasePath = probablePath.replace( 'www', '' );
+        var imageBasePath = probablePath.replace( __dirname + '/www', '' );
         for( let i = 0; i < images.length; i = i + 1 ){
             htmlResponse = htmlResponse + '<img src="' + imageBasePath + '/' + images[ i ] + '">';
         }

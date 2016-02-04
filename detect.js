@@ -3,6 +3,7 @@
 let chalk = require( 'chalk' );
 let mkdirp = require( 'mkdirp' );
 let mysql = require( 'mysql' );
+let path = require( 'path' );
 
 let CharacterFinder = require( './modules/CharacterFinder.js' );
 let twitch = require( './modules/Twitch.js' );
@@ -32,19 +33,38 @@ function saveMatch( rank, channel, status ){
         database : config.database.name
     });
 
-    var insertData = [ channel, rank, status ];
+    var insertData = {
+        'channel': channel,
+        'rank': rank,
+        'status': status
+    };
 
-    connection.connect();
-
-    connection.query( `INSERT INTO matches ( channel, rank, status ) VALUES ( ?, ?, ?, ? )`, insertData, function( error, rows, fields ){
-        if( error ) {
+    pool.getConnection( function( error, connection ){
+        if( error ){
             throw error;
         }
 
-        console.log( chalk.green( channel + '@' + rank + ' - ' + status + ' STORED' ) );
-    });
+        connection.query( `SELECT rank FROM matches WHERE channel = ? ORDER BY timestamp DESC LIMIT 1`, channel, function( error, rows, fields ){
+            if( error ) {
+                throw error;
+            }
 
-    connection.end();
+            if( typeof rows[ 0 ].rank === 'undefined' || rows[ 0 ].rank !== rank ){
+                connection.query( `INSERT INTO matches SET ?`, insertData, function( error, rows, fields ){
+                    if( error ) {
+                        throw error;
+                    }
+
+                    console.log( chalk.green( channel + '@' + rank + ' - ' + status + ' STORED' ) );
+                    connection.release();
+                    pool.end();
+                });
+            } else {
+                connection.release();
+                pool.end();
+            }
+        });
+    });
 }
 
 function getTwitchImageUrl( channel, width, height ){
@@ -66,7 +86,7 @@ function startDetection( channel ){
             console.log( chalk.red( file + ' matched as ' + result ) );
         }
 
-        finder.saveMatchImage( imagePath + '/' + channel + '.jpg' );
+        finder.saveMatchImage( imagePath + '/' + channel.name + '.jpg' );
 
         detectionsDone = detectionsDone + 1;
 
@@ -122,7 +142,7 @@ function loadStreamsBatch( index ){
 }
 
 var date = new Date();
-imagePath = 'www/tmp/' + date.getFullYear() + '-' + ( pad( date.getMonth() + 1, 2 ) ) + '-' + pad( date.getDate(), 2 ) + '-' + pad( date.getHours(), 2 ) + pad( date.getMinutes(), 2 );
+imagePath = path.join( __dirname, 'www/tmp/' + date.getFullYear() + '-' + ( pad( date.getMonth() + 1, 2 ) ) + '-' + pad( date.getDate(), 2 ) + '-' + pad( date.getHours(), 2 ) + pad( date.getMinutes(), 2 ) );
 mkdirp( imagePath, function( error ){
     if( error ){
         throw new Error( error );
