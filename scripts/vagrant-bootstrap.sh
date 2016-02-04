@@ -34,6 +34,8 @@ sudo apt-get install -y libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev bu
 cd /vagrant
 sudo npm install --production
 
+cp /vagrant/scripts/testconfig.json /vagrant/config.json
+
 # Link "nodejs" to "node" on Ubuntu
 if [ ! -L /usr/bin/node ];
 then

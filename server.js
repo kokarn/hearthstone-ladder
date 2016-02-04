@@ -7,14 +7,16 @@ var fs = require( 'fs' );
 var path = require( 'path' );
 
 app.use( express.static( 'www' ) );
+var config = require( './config.js' );
+
 
 app.get( '/data/*', function( request, response ){
     var connection = mysql.createConnection({
-        host : 'localhost',
-        user : 'root',
-        port: 8889,
-        password : 'root',
-        database : 'hearthstone_legends'
+        host : config.database.host,
+        user : config.database.user,
+        port: config.database.port,
+        password : config.database.password,
+        database : config.database.name
     });
 
     connection.connect();
@@ -48,11 +50,11 @@ app.get( '/data/*', function( request, response ){
 
 app.get( '/data', function( request, response ){
     var connection = mysql.createConnection({
-        host : 'localhost',
-        user : 'root',
-        port: 8889,
-        password : 'root',
-        database : 'hearthstone_legends'
+        host : config.database.host,
+        user : config.database.user,
+        port: config.database.port,
+        password : config.database.password,
+        database : config.database.name
     });
 
     connection.connect();

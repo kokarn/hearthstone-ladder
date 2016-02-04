@@ -1,0 +1,9 @@
+{
+    "database": {
+        "host" : "localhost",
+        "user" : "hearthstone",
+        "port": 3306,
+        "password" : "test",
+        "name" : "hearthstone_legends"
+    }
+}

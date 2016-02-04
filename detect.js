@@ -6,6 +6,8 @@ let mysql = require( 'mysql' );
 
 let CharacterFinder = require( './modules/CharacterFinder.js' );
 let twitch = require( './modules/Twitch.js' );
+let config = require( './config.js' );
+
 let imageBaseUrl = 'http://static-cdn.jtvnw.net/previews-ttv/live_user_{channel}-{width}x{height}.jpg';
 let detectionsStarted = 0;
 let detectionsDone = 0;
@@ -22,12 +24,12 @@ function pad(n, width, z) {
 }
 
 function saveMatch( rank, channel, status ){
-    var connection = mysql.createConnection({
-        host : 'localhost',
-        user : 'root',
-        port: 8889,
-        password : 'root',
-        database : 'hearthstone_legends'
+    var pool = mysql.createPool({
+        host : config.database.host,
+        user : config.database.user,
+        port: config.database.port,
+        password : config.database.password,
+        database : config.database.name
     });
 
     var insertData = [ channel, rank, status ];
