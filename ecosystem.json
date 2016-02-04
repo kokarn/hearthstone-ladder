@@ -8,7 +8,7 @@
     },{
         "name" : "detector",
         "script" : "detect.js",
-        "cron_restart": "*/5 * * * *",
+        "cron_restart": "0-59/5 * * * *",
         "merge_logs" : true
     }]
 }
