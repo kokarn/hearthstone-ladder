@@ -49,7 +49,7 @@ function saveMatch( rank, channel, status ){
                 throw error;
             }
 
-            if( typeof rows[ 0 ].rank === 'undefined' || rows[ 0 ].rank !== rank ){
+            if( typeof rows[ 0 ] === 'undefined' || rows[ 0 ].rank !== rank ){
                 connection.query( `INSERT INTO matches SET ?`, insertData, function( error, rows, fields ){
                     if( error ) {
                         throw error;
