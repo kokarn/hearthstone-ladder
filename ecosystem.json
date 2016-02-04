@@ -8,6 +8,7 @@
     },{
         "name" : "detector",
         "script" : "detect.js",
+        "autorestart": false,
         "instances" : 1,
         "exec_mode" : "cluster_mode",
         "cron_restart": "0-59/5 * * * *",
