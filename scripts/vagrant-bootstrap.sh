@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+debconf-set-selections <<< 'mysql-server mysql-server/root_password password test'
+debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password test'
+
 # Update all repos
 apt-get update
 
@@ -13,7 +16,17 @@ sudo apt-get install -y nodejs
 # Install npm
 sudo apt-get install -y npm
 
+# Update npm to latest version
 sudo npm install -g npm
+
+# Install mysql
+sudo apt-get install -y mysql-server
+
+# Setup database user, password and structure
+sudo mysql -ptest < /vagrant/scripts/db-setup.sql
+
+# Add some test data
+sudo mysql -ptest hearthstone_legends < /vagrant/scripts/db-data.sql
 
 # Install dependencies needed for node-canvas
 sudo apt-get install -y libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev build-essential g++
