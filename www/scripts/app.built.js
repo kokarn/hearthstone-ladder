@@ -39,6 +39,14 @@ var _textField = require('material-ui/lib/text-field');
 
 var _textField2 = _interopRequireDefault(_textField);
 
+var _iconButton = require('material-ui/lib/icon-button');
+
+var _iconButton2 = _interopRequireDefault(_iconButton);
+
+var _fontIcon = require('material-ui/lib/font-icon');
+
+var _fontIcon2 = _interopRequireDefault(_fontIcon);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -50,16 +58,30 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var Filter = function (_React$Component) {
     _inherits(Filter, _React$Component);
 
-    function Filter() {
+    function Filter(props) {
         _classCallCheck(this, Filter);
 
-        return _possibleConstructorReturn(this, Object.getPrototypeOf(Filter).apply(this, arguments));
+        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Filter).call(this, props));
+
+        _this.state = {
+            value: ''
+        };
+        return _this;
     }
 
     _createClass(Filter, [{
         key: 'gotFieldChange',
-        value: function gotFieldChange() {
-            this.props.handlePlayerChange(this.refs.player.getValue());
+        value: function gotFieldChange(event) {
+            this.updateValue(event.target.value);
+        }
+    }, {
+        key: 'updateValue',
+        value: function updateValue(value) {
+            this.setState({
+                value: value
+            });
+
+            this.props.handlePlayerChange(value);
         }
     }, {
         key: 'render',
@@ -70,6 +92,7 @@ var Filter = function (_React$Component) {
                     style: {
                         margin: '0 auto',
                         maxWidth: 1024,
+                        position: 'relative',
                         textAlign: 'center'
                     }
                 },
@@ -78,8 +101,28 @@ var Filter = function (_React$Component) {
                     fullWidth: true,
                     hintText: 'Channel or player name',
                     onChange: this.gotFieldChange.bind(this),
-                    ref: 'player'
-                })
+                    ref: 'player',
+                    value: this.state.value
+                }),
+                _react2.default.createElement(
+                    _iconButton2.default,
+                    {
+                        onClick: this.updateValue.bind(this, ''),
+                        style: {
+                            bottom: 0,
+                            position: 'absolute',
+                            right: -12
+                        },
+                        title: 'Clear filter'
+                    },
+                    _react2.default.createElement(
+                        _fontIcon2.default,
+                        {
+                            className: 'material-icons'
+                        },
+                        'clear'
+                    )
+                )
             );
         }
     }]);
@@ -94,7 +137,7 @@ Filter.propTypes = {
 
 exports.default = Filter;
 
-},{"material-ui/lib/text-field":129,"react":353}],3:[function(require,module,exports){
+},{"material-ui/lib/font-icon":100,"material-ui/lib/icon-button":101,"material-ui/lib/text-field":129,"react":353}],3:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
