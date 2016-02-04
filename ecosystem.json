@@ -10,7 +10,7 @@
         "script" : "detect.js",
         "exec_mode": "cluster",
         "instances": 1,
-        "cron_restart": "*/5 * * * *",
+        "cron_restart": "0 */5 * * * *",
         "merge_logs" : true
     }]
 }
