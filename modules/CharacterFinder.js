@@ -143,7 +143,7 @@ CharacterFinder.prototype.onImgLoad = function(){
                     } ) / 255;
                 }
 
-                if( ( bestAnswer == null || bestAnswerValue > sum ) && sum < 4 ){
+                if( ( bestAnswer == null || bestAnswerValue > sum ) && sum < 7 ){
                     bestAnswer = j;
                     bestAnswerValue = sum;
                 }
@@ -155,7 +155,7 @@ CharacterFinder.prototype.onImgLoad = function(){
                 continue;
             } else if( bestAnswer === 4 && numberShapes[ i ].length < 170 ){
                 continue;
-            } else if( bestAnswer === 7 && numberShapes[ i ].length < 130 ){
+            } else if( bestAnswer === 7 && ( numberShapes[ i ].length < 160 || boundaries.ymax - boundaries.ymin < 22 ) ){
                 continue;
             }
 
