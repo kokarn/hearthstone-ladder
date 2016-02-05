@@ -33,7 +33,7 @@ class MainWrapper extends React.Component {
                         textAlign: 'center'
                     } }
                 >
-                    Hearthstone legend ranks
+                    Hearthstone legend ladder ranks
                 </h1>
                 <Filter
                     handlePlayerChange = { this.handlePlayerChange.bind( this ) }

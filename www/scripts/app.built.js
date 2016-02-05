@@ -208,7 +208,7 @@ var MainWrapper = function (_React$Component) {
                             textAlign: 'center'
                         }
                     },
-                    'Hearthstone legend ranks'
+                    'Hearthstone legend ladder ranks'
                 ),
                 _react2.default.createElement(_Filter2.default, {
                     handlePlayerChange: this.handlePlayerChange.bind(this)
