@@ -2,8 +2,7 @@
     "apps" : [{
         "name" : "webserver",
         "script" : "server.js",
-        "watch" : [ "www", "server.js" ],
-        "ignore_watch": [ "tmp" ],
+        "watch" : [ "server.js" ],
         "merge_logs" : true,
         "post_update": [ "npm install --production" ]
     },{
@@ -11,7 +10,7 @@
         "script" : "detect.js",
         "autorestart": false,
         "instances" : 1,
-        "exec_mode" : "cluster_mode",
+        "exec_mode" : "cluster",
         "cron_restart": "0-59/5 * * * *",
         "merge_logs" : true
     }]
