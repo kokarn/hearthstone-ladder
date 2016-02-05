@@ -10,11 +10,13 @@ Hearthstone.prototype.getMomentSeason = function( selectedMoment ){
 };
 
 Hearthstone.prototype.getSeasonStartDate = function( seasonMoment ){
-    return seasonMoment.startOf( 'month' ).add( 1, 'days' ).format( 'YYYY-MM-DD 00:00:00' );
+    let seasonMomentClone = moment( seasonMoment );
+    return seasonMomentClone.startOf( 'month' ).add( 1, 'days' ).format( 'YYYY-MM-DD 00:00:00' );
 };
 
 Hearthstone.prototype.getSeasonEndDate = function( seasonMoment ){
-    return seasonMoment.endOf( 'month' ).add( 1, 'days' ).format( 'YYYY-MM-DD 00:00:00' );
+    let seasonMomentClone = moment( seasonMoment );
+    return seasonMomentClone.endOf( 'month' ).add( 1, 'days' ).format( 'YYYY-MM-DD 00:00:00' );
 };
 
 Hearthstone.prototype.getSeasonMoment = function( season ){
