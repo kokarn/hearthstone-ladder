@@ -8,6 +8,7 @@ var path = require( 'path' );
 var moment = require( 'moment' );
 
 var config = require( './config.js' );
+var hearthstone = require( './modules/Hearthstone.js' );
 
 app.use( express.static( path.join( __dirname, '/www' ) ) );
 
@@ -60,6 +61,8 @@ app.get( '/data', function( request, response ){
         database : config.database.name
     });
 
+    var currentSeason = hearthstone.getCurrentSeasonMoment();
+
     connection.connect();
 
     connection.query( `SELECT
@@ -83,7 +86,7 @@ app.get( '/data', function( request, response ){
             FROM
                 matches
             WHERE
-                timestamp BETWEEN '${moment().startOf( 'month' ).add( 1, 'days' ).format( 'YYYY-MM-DD 00:00:00' )}' AND '${moment().endOf( 'month' ).add( 1, 'days' ).format( 'YYYY-MM-DD 00:00:00' )}'
+                timestamp BETWEEN '${hearthstone.getSeasonStartDate( currentSeason )}' AND '${hearthstone.getSeasonEndDate( currentSeason )}'
             GROUP BY
                 channel
         ) AS t3
@@ -105,7 +108,7 @@ app.get( '/data', function( request, response ){
         AND
             players.should_index = 1
         AND
-            timestamp BETWEEN '${moment().startOf( 'month' ).add( 1, 'days' ).format( 'YYYY-MM-DD 00:00:00' )}' AND '${moment().endOf( 'month' ).add( 1, 'days' ).format( 'YYYY-MM-DD 00:00:00' )}'
+            timestamp BETWEEN '${hearthstone.getSeasonStartDate( currentSeason )}' AND '${hearthstone.getSeasonEndDate( currentSeason )}'
         ORDER BY
             matches.timestamp
         DESC`, function( error, rows, fields ){
