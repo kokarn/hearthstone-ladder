@@ -82,6 +82,8 @@ app.get( '/data', function( request, response ){
                 channel
             FROM
                 matches
+            WHERE
+                timestamp BETWEEN '${moment().startOf( 'month' ).add( 1, 'days' ).format( 'YYYY-MM-DD 00:00:00' )}' AND '${moment().endOf( 'month' ).add( 1, 'days' ).format( 'YYYY-MM-DD 00:00:00' )}'
             GROUP BY
                 channel
         ) AS t3
