@@ -5,6 +5,7 @@ var app = express();
 var mysql = require( 'mysql' );
 var fs = require( 'fs' );
 var path = require( 'path' );
+var moment = require( 'moment' );
 
 var config = require( './config.js' );
 
@@ -99,6 +100,8 @@ app.get( '/data', function( request, response ){
             matches.timestamp = t2.max_timestamp
         AND
             players.should_index = 1
+        AND
+            timestamp BETWEEN '${moment().startOf( 'month' ).add( 1, 'days' ).format( 'YYYY-MM-DD 00:00:00' )}' AND '${moment().endOf( 'month' ).add( 1, 'days' ).format( 'YYYY-MM-DD 00:00:00' )}'
         ORDER BY
             matches.timestamp
         DESC`, function( error, rows, fields ){

@@ -46,6 +46,7 @@
     "mysql": "^2.10.2",
     "request": "~2.69.0",
     "verb-nurbs": "~2.0.0",
-    "webworker-threads": "~0.6.2"
+    "webworker-threads": "~0.6.2",
+    "moment": "^2.11.1"
   }
 }
