@@ -3,6 +3,8 @@
         "name" : "webserver",
         "script" : "server.js",
         "watch" : [ "server.js" ],
+        "exec_mode" : "cluster",
+        "instances" : 1,
         "merge_logs" : true,
         "post_update": [ "npm install --production" ]
     },{
