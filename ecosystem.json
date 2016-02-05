@@ -2,7 +2,7 @@
     "apps" : [{
         "name" : "webserver",
         "script" : "server.js",
-        "watch" : [ "www" ],
+        "watch" : [ "www", "server.js" ],
         "ignore_watch": [ "tmp" ],
         "merge_logs" : true
     },{
