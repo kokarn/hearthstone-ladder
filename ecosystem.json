@@ -4,7 +4,8 @@
         "script" : "server.js",
         "watch" : [ "www", "server.js" ],
         "ignore_watch": [ "tmp" ],
-        "merge_logs" : true
+        "merge_logs" : true,
+        "post_update": [ "npm install --production" ]
     },{
         "name" : "detector",
         "script" : "detect.js",
