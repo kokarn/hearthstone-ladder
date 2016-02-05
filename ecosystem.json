@@ -10,10 +10,9 @@
     },{
         "name" : "detector",
         "script" : "detect.js",
-        "autorestart": false,
         "instances" : 1,
         "exec_mode" : "cluster",
-        "cron_restart": "*/5 * * * *",
+        "cron_restart": "0-59/5 * * * *",
         "merge_logs" : true
     }]
 }
