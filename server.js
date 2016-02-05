@@ -37,6 +37,8 @@ app.get( '/data/*', function( request, response ){
             matches.channel = players.channel
         WHERE
             matches.channel = ?
+        AND
+            timestamp BETWEEN '${moment().startOf( 'month' ).add( 1, 'days' ).format( 'YYYY-MM-DD 00:00:00' )}' AND '${moment().endOf( 'month' ).add( 1, 'days' ).format( 'YYYY-MM-DD 00:00:00' )}'
         ORDER BY
             matches.timestamp`, request.params[ 0 ], function( error, rows, fields ){
         if( error ) {
