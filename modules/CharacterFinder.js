@@ -154,6 +154,8 @@ CharacterFinder.prototype.onImgLoad = function(){
                 continue;
             } else if( bestAnswer === 4 && ( numberShapes[ i ].length < 160 || boundaries.ymax - boundaries.ymin < 20 ) ){
                 continue;
+            } else if( bestAnswer === 5 && numberShapes[ i ].length < 170 ){
+                continue;
             } else if( bestAnswer === 7 && ( numberShapes[ i ].length < 140 || boundaries.ymax - boundaries.ymin < 22 ) ){
                 continue;
             }
