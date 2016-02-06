@@ -108,6 +108,8 @@ app.get( '/data', function( request, response ){
         AND
             players.should_index = 1
         AND
+            t3.total_matches > 1
+        AND
             timestamp BETWEEN '${hearthstone.getSeasonStartDate( currentSeason )}' AND '${hearthstone.getSeasonEndDate( currentSeason )}'
         ORDER BY
             matches.timestamp
