@@ -66,7 +66,7 @@ CharacterFinder.prototype.setImg = function( inputImageData ){
     this.canvas = new Canvas( this.width, this.height );
     this.context = this.canvas.getContext( '2d' );
 
-    this.ypos = 200;
+    this.ypos = 205;
 
     this.onImgLoad();
 };
