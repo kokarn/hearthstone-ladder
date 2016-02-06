@@ -6,13 +6,12 @@ var Stream = require( 'stream' ).Transform;
 var verb = require( '../node_modules/verb-nurbs/build/js/verb.js' );
 //var verb = require( 'verb-nurbs' );
 
-var CharacterFinder = function( filePath, width, height ){
+var CharacterFinder = function( filePath ){
     var _this = this;
-
     this.onCompleteCallbacks = [];
     this.filePath = filePath;
-    this.width = width;
-    this.height = height;
+    this.width = 230;
+    this.height = 105;
 
     console.log( 'Loading ', filePath );
 

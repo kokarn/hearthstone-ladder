@@ -75,7 +75,7 @@ function getTwitchImageUrl( channel, width, height ){
 }
 
 function startDetection( channel ){
-    var finder = new CharacterFinder( getTwitchImageUrl( channel.name, 1920, 1080 ), 180, 105 );
+    var finder = new CharacterFinder( getTwitchImageUrl( channel.name, 1920, 1080 ) );
     detectionsStarted = detectionsStarted + 1;
 
     finder.onComplete( function( file, result ){
