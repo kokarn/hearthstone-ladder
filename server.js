@@ -193,14 +193,12 @@ app.get( '/cleanup', function( request, response ){
                     // If the next channel is the same as this check the diff timestamp
                     if( moment( rows[ i + 1 ].timestamp ).diff( moment( rows[ i ].timestamp ) ) > timediffValidity ){
                         // The timestamp is more than timediffValidity offset from the previous timestamp so probably a one-off match
-                        console.log( 'Clear up', rows[ i ].timestamp, ' its more than 1 hour from ', rows[ i + 1 ].timestamp );
                         htmlResponse = htmlResponse + '<img src="' + getMatchImagePath( rows[ i ].channel, rows[ i ].timestamp ) + '">';
                     }
                 } else if( rows[ i - 1 ].channel === rows[ i ].channel ){
                     // If the next channel isn't the same, check if the previous one is
                     if( moment( rows[ i ].timestamp ).diff( moment( rows[ i - 1 ].timestamp ) ) > timediffValidity ){
                         // Check if that timestamp is more than one newer than the latest one.
-                        console.log( 'Clear up', rows[ i ].timestamp, ' its more than 1 hour from', rows[ i - 1 ].timestamp );
                         htmlResponse = htmlResponse + '<img src="' + getMatchImagePath( rows[ i ].channel, rows[ i ].timestamp ) + '">';
                     }
                 } else {
@@ -208,7 +206,6 @@ app.get( '/cleanup', function( request, response ){
                     if( moment( rows[ i ].timestamp ).diff( moment() ) > timediffValidity ){
                         // If the next channel isn't the same as this, this is the last timestamp for that channel.
                         // Check if that timestamp is more than one newer than the next last one.
-                        console.log( 'Clear up', rows[ i ].timestamp, ' its more than 1 hour old' );
                         htmlResponse = htmlResponse + '<img src="' + getMatchImagePath( rows[ i ].channel, rows[ i ].timestamp ) + '">';
                     }
                 }
