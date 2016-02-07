@@ -20,7 +20,7 @@ function pad( n, width, z ) {
 
 function getMatchImagePath( channel, timestamp ){
     let startMoment = moment( timestamp );
-    return 'tmp/' + startMoment.year() + '-' + pad( startMoment.month() + 1, 2 ) + '-' + pad( startMoment.date(), 2 ) + '-' + startMoment.hour() + ( startMoment.minute() - ( startMoment.minute() % 5 ) ) + '.jpg';
+    return 'tmp/' + startMoment.year() + '-' + pad( startMoment.month() + 1, 2 ) + '-' + pad( startMoment.date(), 2 ) + '-' + pad( startMoment.hour(), 2 ) + pad( startMoment.minute() - ( startMoment.minute() % 5 ), 2 ) + '/' + channel + '.jpg';
 }
 
 app.get( '/data/*', function( request, response ){
