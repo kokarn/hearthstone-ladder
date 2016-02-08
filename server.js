@@ -219,6 +219,48 @@ app.get( '/cleanup', function( request, response ){
     );
 });
 
+app.get( '/cleanup/all', function( request, response ){
+    var connection = mysql.createConnection({
+        host : config.database.host,
+        user : config.database.user,
+        port: config.database.port,
+        password : config.database.password,
+        database : config.database.name
+    });
+
+    var currentSeason = hearthstone.getCurrentSeasonMoment();
+    var htmlResponse = '';
+
+    connection.connect();
+
+    connection.query( `
+        SELECT
+            channel,
+            timestamp
+        FROM
+            matches
+        WHERE
+            timestamp BETWEEN '${hearthstone.getSeasonStartDate( currentSeason )}' AND '${hearthstone.getSeasonEndDate( currentSeason )}'
+        ORDER BY
+            channel,
+            timestamp`,
+        function( error, rows, fields ){
+            if( error ) {
+                throw error;
+            }
+
+            let currentChannel = false;
+            let lastTimestamp = false;
+            let timediffValidity = 3600000;
+            for( let i = 0; i < rows.length - 1; i = i + 1 ){
+                htmlResponse = htmlResponse + '<img src="' + getMatchImagePath( rows[ i ].channel, rows[ i ].timestamp ) + '">';
+            }
+
+            response.send( htmlResponse );
+        }
+    );
+});
+
 app.get( '/check/*', function( request, response ){
     var htmlResponse = '';
     var probablePath = path.join( __dirname + '/www/tmp/', request.params[ 0 ] );
