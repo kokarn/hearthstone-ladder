@@ -189,6 +189,7 @@ app.get( '/cleanup', function( request, response ){
 
     connection.query( `
         SELECT
+            id,
             channel,
             timestamp
         FROM
@@ -196,46 +197,32 @@ app.get( '/cleanup', function( request, response ){
         WHERE
             timestamp BETWEEN '${hearthstone.getSeasonStartDate( currentSeason )}' AND '${hearthstone.getSeasonEndDate( currentSeason )}'
         ORDER BY
-            channel,
-            timestamp`,
+            timestamp
+        DESC`,
         function( error, rows, fields ){
             if( error ) {
                 throw error;
             }
 
-            let currentChannel = false;
-            let lastTimestamp = false;
-            let timediffValidity = 3600000;
             for( let i = 0; i < rows.length - 1; i = i + 1 ){
-
-                if( rows[ i + 1 ].channel === rows[ i ].channel ){
-                    // If the next channel is the same as this check the diff timestamp
-                    if( moment( rows[ i + 1 ].timestamp ).diff( moment( rows[ i ].timestamp ) ) > timediffValidity ){
-                        // The timestamp is more than timediffValidity offset from the previous timestamp so probably a one-off match
-                        htmlResponse = htmlResponse + '<img src="' + getMatchImagePath( rows[ i ].channel, rows[ i ].timestamp ) + '">';
-                    }
-                } else if( rows[ i - 1 ].channel === rows[ i ].channel ){
-                    // If the next channel isn't the same, check if the previous one is
-                    if( moment( rows[ i ].timestamp ).diff( moment( rows[ i - 1 ].timestamp ) ) > timediffValidity ){
-                        // Check if that timestamp is more than one newer than the latest one.
-                        htmlResponse = htmlResponse + '<img src="' + getMatchImagePath( rows[ i ].channel, rows[ i ].timestamp ) + '">';
-                    }
-                } else {
-                    // Neither the next nor the previous channel match is the same
-                    if( moment( rows[ i ].timestamp ).diff( moment() ) > timediffValidity ){
-                        // If the next channel isn't the same as this, this is the last timestamp for that channel.
-                        // Check if that timestamp is more than one newer than the next last one.
-                        htmlResponse = htmlResponse + '<img src="' + getMatchImagePath( rows[ i ].channel, rows[ i ].timestamp ) + '">';
-                    }
-                }
+                htmlResponse = htmlResponse + '<a href="/invalidate?id=' + rows[ i ].id + '"><img src="' + getMatchImagePath( rows[ i ].channel, rows[ i ].timestamp ) + '"></a>';
             }
 
             response.send( htmlResponse );
         }
     );
+
+    connection.end();
 });
 
-app.get( '/cleanup/all', function( request, response ){
+app.get( '/invalidate', function( request, response ){
+    let removeId = Number( request.query.id );
+
+    if( !Number.isInteger( removeId ) || removeId < 1 ){
+        response.end();
+        return false;
+    }
+
     var connection = mysql.createConnection({
         host : config.database.host,
         user : config.database.user,
@@ -244,37 +231,25 @@ app.get( '/cleanup/all', function( request, response ){
         database : config.database.name
     });
 
-    var currentSeason = hearthstone.getCurrentSeasonMoment();
-    var htmlResponse = '';
-
     connection.connect();
 
     connection.query( `
-        SELECT
-            channel,
-            timestamp
+        DELETE
         FROM
             matches
         WHERE
-            timestamp BETWEEN '${hearthstone.getSeasonStartDate( currentSeason )}' AND '${hearthstone.getSeasonEndDate( currentSeason )}'
-        ORDER BY
-            channel,
-            timestamp`,
+            id = ?
+        LIMIT
+            1`,
+        removeId,
         function( error, rows, fields ){
             if( error ) {
                 throw error;
             }
-
-            let currentChannel = false;
-            let lastTimestamp = false;
-            let timediffValidity = 3600000;
-            for( let i = 0; i < rows.length - 1; i = i + 1 ){
-                htmlResponse = htmlResponse + '<img src="' + getMatchImagePath( rows[ i ].channel, rows[ i ].timestamp ) + '">';
-            }
-
-            response.send( htmlResponse );
         }
     );
+    response.end();
+    connection.end();
 });
 
 app.listen( 3000, function(){
