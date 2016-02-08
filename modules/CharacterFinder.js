@@ -150,7 +150,7 @@ CharacterFinder.prototype.onImgLoad = function(){
                 continue;
             } else if( bestAnswer === 2 && boundaries.ymax - boundaries.ymin < 20 ){
                 continue;
-            } else if( bestAnswer === 3 && boundaries.ymax - boundaries.ymin < 20 ){
+            } else if( bestAnswer === 3 && ( numberShapes[ i ].length < 150 || boundaries.ymax - boundaries.ymin < 20 ) ){
                 continue;
             } else if( bestAnswer === 4 && ( numberShapes[ i ].length < 155 || boundaries.ymax - boundaries.ymin < 20 ) ){
                 continue;
