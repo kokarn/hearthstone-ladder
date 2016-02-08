@@ -198,7 +198,9 @@ app.get( '/cleanup', function( request, response ){
             timestamp BETWEEN '${hearthstone.getSeasonStartDate( currentSeason )}' AND '${hearthstone.getSeasonEndDate( currentSeason )}'
         ORDER BY
             timestamp
-        DESC`,
+        DESC
+        LIMIT
+            1000`,
         function( error, rows, fields ){
             if( error ) {
                 throw error;
