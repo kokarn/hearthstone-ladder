@@ -86,6 +86,29 @@ var Filter = function (_React$Component) {
     }, {
         key: 'render',
         value: function render() {
+            var clearButton = false;
+            if (this.state.value !== '') {
+                clearButton = _react2.default.createElement(
+                    _iconButton2.default,
+                    {
+                        onClick: this.updateValue.bind(this, ''),
+                        style: {
+                            bottom: 0,
+                            position: 'absolute',
+                            right: -12
+                        },
+                        title: 'Clear filter'
+                    },
+                    _react2.default.createElement(
+                        _fontIcon2.default,
+                        {
+                            className: 'material-icons'
+                        },
+                        'clear'
+                    )
+                );
+            }
+
             return _react2.default.createElement(
                 'div',
                 {
@@ -104,25 +127,7 @@ var Filter = function (_React$Component) {
                     ref: 'player',
                     value: this.state.value
                 }),
-                _react2.default.createElement(
-                    _iconButton2.default,
-                    {
-                        onClick: this.updateValue.bind(this, ''),
-                        style: {
-                            bottom: 0,
-                            position: 'absolute',
-                            right: -12
-                        },
-                        title: 'Clear filter'
-                    },
-                    _react2.default.createElement(
-                        _fontIcon2.default,
-                        {
-                            className: 'material-icons'
-                        },
-                        'clear'
-                    )
-                )
+                clearButton
             );
         }
     }]);

@@ -26,6 +26,27 @@ class Filter extends React.Component {
     }
 
     render(){
+        let clearButton = false;
+        if( this.state.value !== '' ){
+            clearButton = (
+                <IconButton
+                    onClick = { this.updateValue.bind( this, '' ) }
+                    style = { {
+                        bottom: 0,
+                        position: 'absolute',
+                        right: -12
+                    } }
+                    title = "Clear filter"
+                >
+                    <FontIcon
+                        className = "material-icons"
+                    >
+                        clear
+                    </FontIcon>
+                </IconButton>
+            );
+        }
+
         return (
             <div
                 style = { {
@@ -43,21 +64,7 @@ class Filter extends React.Component {
                     ref = "player"
                     value = { this.state.value }
                 />
-                <IconButton
-                    onClick = { this.updateValue.bind( this, '' ) }
-                    style = { {
-                        bottom: 0,
-                        position: 'absolute',
-                        right: -12
-                    } }
-                    title = "Clear filter"
-                >
-                    <FontIcon
-                        className = "material-icons"
-                    >
-                        clear
-                    </FontIcon>
-                </IconButton>
+                { clearButton }
             </div>
         );
     }
