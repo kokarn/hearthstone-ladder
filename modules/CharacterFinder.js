@@ -156,6 +156,8 @@ CharacterFinder.prototype.onImgLoad = function(){
                 continue;
             } else if( bestAnswer === 5 && ( numberShapes[ i ].length < 170 || boundaries.ymax - boundaries.ymin < 22 ) ){
                 continue;
+            } else if( bestAnswer === 6 && numberShapes[ i ].length < 160 ){
+                continue;
             } else if( bestAnswer === 7 && ( numberShapes[ i ].length < 140 || boundaries.ymax - boundaries.ymin < 22 ) ){
                 continue;
             } else if( bestAnswer === 8 && numberShapes[ i ].length > 350 ){
