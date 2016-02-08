@@ -188,6 +188,9 @@ CharacterFinder.prototype.onImgLoad = function(){
     } else if( resultingNumbers.length === 1 && resultingNumbers[ 0 ] === 1 ){
         // It's too hard to match a single one, skip that for now
         resultingNumbers = false;
+    } else if( resultingNumbers[ 0 ] === 0 ){
+        // If the first number is a zero, somethings up
+        resultingNumbers = false;
     }
 
     for( var i = 0, l = this.onCompleteCallbacks.length; i < l; i++){
