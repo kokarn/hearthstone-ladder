@@ -159,7 +159,7 @@ CharacterFinder.prototype.onImgLoad = function(){
             // Make sure the current bounding box is close enough to the last one
             if( resultingNumbers.length > 0 ){
                 var previousBoundaries = findBoundaries( numberShapes[ validShapes[ validShapes.length - 2 ] ] );
-                if( boundaries.xmin - previousBoundaries.xmax > 9 ){
+                if( boundaries.xmin - previousBoundaries.xmax > 11 ){
                     continue;
                 }
             }
