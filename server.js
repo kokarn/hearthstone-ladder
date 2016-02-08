@@ -157,6 +157,22 @@ app.get( '/check', function( request, response ){
     response.send( htmlResponse );
 });
 
+app.get( '/check/*', function( request, response ){
+    var htmlResponse = '';
+    var probablePath = path.join( __dirname + '/www/tmp/', request.params[ 0 ] );
+
+    if( fs.statSync( probablePath ).isDirectory() ){
+        var images = fs.readdirSync( probablePath );
+        var imageBasePath = probablePath.replace( __dirname + '/www', '' );
+        for( let i = 0; i < images.length; i = i + 1 ){
+            let channel = images[ i ].replace( '.jpg', '' );
+            htmlResponse = htmlResponse + '<a href="http://static-cdn.jtvnw.net/previews-ttv/live_user_' + channel + '-1920x1080.jpg"><img src="' + imageBasePath + '/' + images[ i ] + '"></a>';
+        }
+    }
+
+    response.send( htmlResponse );
+});
+
 app.get( '/cleanup', function( request, response ){
     var connection = mysql.createConnection({
         host : config.database.host,
@@ -259,21 +275,6 @@ app.get( '/cleanup/all', function( request, response ){
             response.send( htmlResponse );
         }
     );
-});
-
-app.get( '/check/*', function( request, response ){
-    var htmlResponse = '';
-    var probablePath = path.join( __dirname + '/www/tmp/', request.params[ 0 ] );
-
-    if( fs.statSync( probablePath ).isDirectory() ){
-        var images = fs.readdirSync( probablePath );
-        var imageBasePath = probablePath.replace( __dirname + '/www', '' );
-        for( let i = 0; i < images.length; i = i + 1 ){
-            htmlResponse = htmlResponse + '<img src="' + imageBasePath + '/' + images[ i ] + '">';
-        }
-    }
-
-    response.send( htmlResponse );
 });
 
 app.listen( 3000, function(){
