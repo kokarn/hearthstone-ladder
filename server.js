@@ -166,6 +166,7 @@ app.get( '/cleanup', function( request, response ){
         database : config.database.name
     });
 
+    var currentSeason = hearthstone.getCurrentSeasonMoment();
     var htmlResponse = '';
 
     connection.connect();
@@ -176,6 +177,8 @@ app.get( '/cleanup', function( request, response ){
             timestamp
         FROM
             matches
+        WHERE
+            timestamp BETWEEN '${hearthstone.getSeasonStartDate( currentSeason )}' AND '${hearthstone.getSeasonEndDate( currentSeason )}'
         ORDER BY
             channel,
             timestamp`,
