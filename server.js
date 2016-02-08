@@ -1,16 +1,63 @@
 'use strict';
 
-var express = require( 'express' );
-var app = express();
 var mysql = require( 'mysql' );
 var fs = require( 'fs' );
 var path = require( 'path' );
 var moment = require( 'moment' );
 
+var express = require( 'express' );
+var session = require( 'express-session' );
+var bodyParser = require( 'body-parser' );
+var hash = require( './modules/pass.js' ).hash;
+
 var config = require( './config.js' );
 var hearthstone = require( './modules/Hearthstone.js' );
 
+var users = {
+    kokarn: {
+        name: 'kokarn'
+    }
+};
+var app = express();
+
 app.use( express.static( path.join( __dirname, '/www' ) ) );
+
+app.use( session({
+    resave: false, // don't save session if unmodified
+    saveUninitialized: false, // don't create session until something stored
+    secret: 'sJ7jx3n2bXDPwofbU5zuW'
+}));
+
+app.use( bodyParser.urlencoded( {
+    extended: true
+}));
+
+app.use( function( request, response, next ){
+    var error = request.session.error;
+    var msg = request.session.success;
+    delete request.session.error;
+    delete request.session.success;
+
+    response.locals.message = '';
+    if( error ){
+        response.locals.message = '<p class="msg error">' + error + '</p>';
+    }
+
+    if( msg ){
+        response.locals.message = '<p class="msg success">' + msg + '</p>';
+    }
+
+    next();
+});
+
+hash( 'kokarn1337', function( error, salt, hash){
+    if ( error ){
+        throw err;
+    }
+
+    users.kokarn.salt = salt;
+    users.kokarn.hash = hash;
+});
 
 function pad( n, width, z ) {
     z = z || '0';
@@ -22,6 +69,77 @@ function getMatchImagePath( channel, timestamp ){
     let startMoment = moment( timestamp );
     return '/tmp/' + startMoment.year() + '-' + pad( startMoment.month() + 1, 2 ) + '-' + pad( startMoment.date(), 2 ) + '-' + pad( startMoment.hour(), 2 ) + pad( startMoment.minute() - ( startMoment.minute() % 5 ), 2 ) + '/' + channel + '.jpg';
 }
+
+function authenticate( name, pass, fn ){
+    if ( !module.parent ) {
+        console.log( 'authenticating %s:%s', name, pass );
+    }
+
+    var user = users[ name ];
+    if( !user ){
+        return fn( new Error( 'Cannot find user' ) );
+    }
+
+    if( !pass ){
+        return fn( new Error( 'Got no password' ) );
+    }
+    // apply the same algorithm to the POSTed password, applying
+    // the hash against the pass / salt, if there is a match we
+    // found the user
+    hash( pass, user.salt, function( error, hash ){
+        if( error ){
+            return fn( error );
+        }
+
+        if( hash === user.hash ) {
+            return fn( null, user );
+        }
+
+        fn( new Error( 'invalid password' ) );
+    });
+}
+
+function restrict( request, response, next ){
+    if ( request.session.user ){
+        next();
+    } else {
+        request.session.error = 'Access denied!';
+        response.redirect( '/login' );
+    }
+}
+
+app.post( '/login', function( request, response ){
+    authenticate( request.body.username, request.body.password, function( error, user ){
+        if( user ) {
+            request.session.regenerate(function(){
+                request.session.user = user;
+                request.session.success = 'Authenticated as ' + user.name + ' click to <a href="/logout">logout</a>. You may now access <a href="/restricted">/restricted</a>.';
+                response.redirect( '/check' );
+            });
+        } else {
+            request.session.error = 'Authentication failed, please check your username and password. (use "tj" and "foobar")';
+            response.redirect( '/login' );
+        }
+    });
+});
+
+app.get( '/login', function( request, response ){
+    let responseHtml = `
+        <form method="post" action="/login">
+            <input type="text" name="username" placeholder="username">
+            <input type="password" name="password">
+            <input type="submit" value="Log in">
+        </form>
+    `;
+
+    response.send( responseHtml );
+});
+
+app.get( '/logout', function( request, response ){
+    request.session.destroy( function(){
+        response.redirect( '/' );
+    });
+});
 
 app.get( '/data/*', function( request, response ){
     var connection = mysql.createConnection({
@@ -135,7 +253,7 @@ app.get( '/data', function( request, response ){
     connection.end();
 });
 
-app.get( '/check', function( request, response ){
+app.get( '/check', restrict, function( request, response ){
     var rootPath = __dirname + '/www/tmp/';
     var htmlResponse = '<ul>';
     var validFolders = [];
@@ -157,7 +275,7 @@ app.get( '/check', function( request, response ){
     response.send( htmlResponse );
 });
 
-app.get( '/check/*', function( request, response ){
+app.get( '/check/*', restrict, function( request, response ){
     var htmlResponse = '';
     var probablePath = path.join( __dirname + '/www/tmp/', request.params[ 0 ] );
 
@@ -173,7 +291,7 @@ app.get( '/check/*', function( request, response ){
     response.send( htmlResponse );
 });
 
-app.get( '/cleanup', function( request, response ){
+app.get( '/cleanup', restrict, function( request, response ){
     var connection = mysql.createConnection({
         host : config.database.host,
         user : config.database.user,
@@ -217,7 +335,7 @@ app.get( '/cleanup', function( request, response ){
     connection.end();
 });
 
-app.get( '/invalidate', function( request, response ){
+app.get( '/invalidate', restrict, function( request, response ){
     let removeId = Number( request.query.id );
 
     if( !Number.isInteger( removeId ) || removeId < 1 ){
