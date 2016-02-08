@@ -218,7 +218,7 @@ class RankTable extends React.Component {
                         <TableHeaderColumn
                             style = { columnStyles.age }
                         >
-                            Age
+                            Last update
                         </TableHeaderColumn>
                         { statusNode }
                         <TableHeaderColumn

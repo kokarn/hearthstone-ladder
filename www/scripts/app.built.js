@@ -893,7 +893,7 @@ var RankTable = function (_React$Component) {
                             {
                                 style: columnStyles.age
                             },
-                            'Age'
+                            'Last update'
                         ),
                         statusNode,
                         _react2.default.createElement(
