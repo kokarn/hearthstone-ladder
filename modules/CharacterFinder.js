@@ -80,9 +80,9 @@ CharacterFinder.prototype.onImgLoad = function(){
     this.context.drawImage( this.img, 0, this.img.height - this.ypos, this.width, this.height, 0, 0, this.width, this.height );
 
     var tracedShapes = this.traceAll( {
-        r: 221,
-        g: 216,
-        b: 136,
+        r: 213,
+        g: 214,
+        b: 147,
         a: 1
     } );
 
