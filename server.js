@@ -358,6 +358,13 @@ app.get( '/channel/*', restrict, function( request, response ){
             DESC`,
             request.params[ 0 ],
             function( error, rows, fields ){
+
+                // If we go to an non-existing channel, don't break the server
+                if( typeof rows === 'undefined' || typeof rows[ 0 ] === 'undefined' ){
+                    response.end();
+                    return false;
+                }
+
                 if( rows[ 0 ].should_index ){
                     var shouldIndexQueryParam = '0';
                 } else {
