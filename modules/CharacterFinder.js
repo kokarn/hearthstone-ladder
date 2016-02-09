@@ -171,6 +171,10 @@ CharacterFinder.prototype.onImgLoad = function(){
                 if( boundaries.xmin - previousBoundaries.xmax > 11 ){
                     continue;
                 }
+
+                if( Math.abs( previousBoundaries.ymax - boundaries.ymax ) > 11 ){
+                    continue;
+                }
             }
 
             if( bestAnswer !== null ){
