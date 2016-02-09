@@ -18,6 +18,14 @@ var CharacterFinder = function( filePath ){
     // What ypos to start the image. 0 is bottom
     this.ypos = 205;
 
+    // What color to try to find
+    this.setColor({
+        r: 219,
+        g: 204,
+        b: 122,
+        a: 1
+    });
+
     console.log( 'Loading ', filePath );
 
     // This doesn't work for some reason, callstack get's exceeded
@@ -73,6 +81,10 @@ CharacterFinder.prototype.setImg = function( inputImageData ){
     this.onImgLoad();
 };
 
+CharacterFinder.prototype.setColor = function( colorObjet ){
+    this.color = colorObjet;
+};
+
 CharacterFinder.prototype.onImgLoad = function(){
 
     var correct = 0;
@@ -82,12 +94,7 @@ CharacterFinder.prototype.onImgLoad = function(){
 
     this.context.drawImage( this.img, 0, this.img.height - this.ypos, this.width, this.height, 0, 0, this.width, this.height );
 
-    var tracedShapes = this.traceAll( {
-        r: 213,
-        g: 214,
-        b: 147,
-        a: 1
-    } );
+    var tracedShapes = this.traceAll( this.color );
 
     for(var i = 0, l = tracedShapes.length; i < l; i++ ){
         if( tracedShapes[ i ].length < 90 || tracedShapes[ i ].length > 400 ){
