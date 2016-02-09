@@ -120,6 +120,18 @@ CharacterFinder.prototype.onImgLoad = function(){
             boundaries.xmax < this.width - 1 &&
             boundaries.ymax < this.height - 1
         ){
+            // Make sure the current bounding box is close enough to the last one
+            if( validShapes.length > 0 ){
+                var previousBoundaries = findBoundaries( numberShapes[ validShapes[ validShapes.length - 1 ] ] );
+                if( boundaries.xmin - previousBoundaries.xmax > 11 ){
+                    continue;
+                }
+
+                if( Math.abs( previousBoundaries.ymax - boundaries.ymax ) > 11 ){
+                    continue;
+                }
+            }
+
             validShapes.push( i );
             this.drawRect( boundaries.xmin - 2, boundaries.ymin - 2, boundaries.xmax + 2, boundaries.ymax + 2, '#f00' );
             correct = correct + 1;
@@ -177,18 +189,6 @@ CharacterFinder.prototype.onImgLoad = function(){
                 continue;
             } else if( bestAnswer === 8 && numberShapes[ i ].length > 420 ){
                 continue;
-            }
-
-            // Make sure the current bounding box is close enough to the last one
-            if( resultingNumbers.length > 0 ){
-                var previousBoundaries = findBoundaries( numberShapes[ validShapes[ validShapes.length - 2 ] ] );
-                if( boundaries.xmin - previousBoundaries.xmax > 11 ){
-                    continue;
-                }
-
-                if( Math.abs( previousBoundaries.ymax - boundaries.ymax ) > 11 ){
-                    continue;
-                }
             }
 
             if( bestAnswer !== null ){
