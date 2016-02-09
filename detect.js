@@ -18,28 +18,61 @@ let streamsPerBatch = 25;
 let currentBatch = 0;
 let imagePath;
 
+var connectionPool = mysql.createPool({
+    host : config.database.host,
+    user : config.database.user,
+    port: config.database.port,
+    password : config.database.password,
+    database : config.database.name
+});
+
 function pad(n, width, z) {
     z = z || '0';
     n = n + '';
     return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
 }
 
-function saveMatch( rank, channel, status ){
-    var pool = mysql.createPool({
-        host : config.database.host,
-        user : config.database.user,
-        port: config.database.port,
-        password : config.database.password,
-        database : config.database.name
-    });
+function addPlayer( channel ){
+    connectionPool.getConnection( function( error, connection ){
+        if( error ){
+            throw error;
+        }
 
+        connection.query( 'SELECT COUNT(*) FROM players WHERE channel = ? LIMIT 1', channel, function( error, rows, fields ){
+            if( error ){
+                throw error;
+            }
+
+            var createData = {
+                channel: channel,
+                name: channel
+            };
+
+            if( typeof rows === 'undefined' || rows[ 0 ][ 'COUNT(*)' ] <= 0 ){
+                console.log( 'channel', channel, 'doesnt exists as a player' );
+                connection.query( `INSERT INTO players SET ?`, createData, function( error, rows, fields ){
+                    if( error ){
+                        throw error;
+                    }
+
+                    connection.release();
+                });
+            } else {
+                console.log( 'channel', channel, 'already exists as a player' );
+                connection.release();
+            }
+        });
+    });
+}
+
+function saveMatch( rank, channel, status ){
     var insertData = {
         'channel': channel,
         'rank': rank,
         'status': status
     };
 
-    pool.getConnection( function( error, connection ){
+    connectionPool.getConnection( function( error, connection ){
         if( error ){
             throw error;
         }
@@ -49,6 +82,8 @@ function saveMatch( rank, channel, status ){
                 throw error;
             }
 
+            addPlayer( channel );
+
             if( typeof rows[ 0 ] === 'undefined' || rows[ 0 ].rank !== rank ){
                 connection.query( `INSERT INTO matches SET ?`, insertData, function( error, rows, fields ){
                     if( error ) {
@@ -57,11 +92,9 @@ function saveMatch( rank, channel, status ){
 
                     console.log( chalk.green( channel + '@' + rank + ' - ' + status + ' STORED' ) );
                     connection.release();
-                    pool.end();
                 });
             } else {
                 connection.release();
-                pool.end();
             }
         });
     });
