@@ -103,6 +103,7 @@ CharacterFinder.prototype.onImgLoad = function(){
         if(
             boundaries.ymin !== 0 &&
             boundaries.xmax - boundaries.xmin < 25 &&
+            boundaries.ymax - boundaries.ymin > 20 &&
             ( boundaries.ymax - boundaries.ymin ) / ( boundaries.xmax - boundaries.xmin ) >= 0.95 &&
             ( boundaries.ymax - boundaries.ymin ) / ( boundaries.xmax - boundaries.xmin ) < 1.9 &&
             ( boundaries.ymax - boundaries.ymin ) > 15 &&
