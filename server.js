@@ -338,23 +338,23 @@ app.get( '/channel/*', restrict, function( request, response ){
         }
 
         connection.query( `SELECT
-            id,
-            rank,
-            matches.channel,
-            timestamp,
-            status,
-            name,
-            should_index
+                id,
+                rank,
+                matches.channel,
+                timestamp,
+                status,
+                name,
+                should_index
             FROM
-            matches
+                matches
             LEFT JOIN
-            players
+                players
             ON
-            matches.channel = players.channel
+                matches.channel = players.channel
             WHERE
-            matches.channel = ?
+                matches.channel = ?
             ORDER BY
-            matches.timestamp
+                matches.timestamp
             DESC`,
             request.params[ 0 ],
             function( error, rows, fields ){
