@@ -97,7 +97,7 @@ CharacterFinder.prototype.onImgLoad = function(){
     var tracedShapes = this.traceAll( this.color );
 
     for(var i = 0, l = tracedShapes.length; i < l; i++ ){
-        if( tracedShapes[ i ].length < 90 || tracedShapes[ i ].length > 400 ){
+        if( tracedShapes[ i ].length < 90 || tracedShapes[ i ].length > 420 ){
             this.drawPixels( this.context, tracedShapes[ i ], '#000' );
         } else {
             numberShapes.push( tracedShapes[ i ] );
@@ -171,7 +171,7 @@ CharacterFinder.prototype.onImgLoad = function(){
                 continue;
             } else if( bestAnswer === 7 && ( numberShapes[ i ].length < 140 || boundaries.ymax - boundaries.ymin < 22 ) ){
                 continue;
-            } else if( bestAnswer === 8 && numberShapes[ i ].length > 350 ){
+            } else if( bestAnswer === 8 && numberShapes[ i ].length > 420 ){
                 continue;
             }
 
@@ -296,7 +296,7 @@ CharacterFinder.prototype.traceAreaStepColor = function( startx, starty, color, 
             result = result.concat( this.traceAreaStepColor( startx + 1, starty, color, index, canvasData ) );
         }
 
-        if( result.length > 400 ){
+        if( result.length > 420 ){
             return result;
         }
 
@@ -304,7 +304,7 @@ CharacterFinder.prototype.traceAreaStepColor = function( startx, starty, color, 
             result = result.concat( this.traceAreaStepColor( startx, starty + 1, color, index, canvasData ) );
         }
 
-        if( result.length > 400 ){
+        if( result.length > 420 ){
             return result;
         }
 
@@ -312,7 +312,7 @@ CharacterFinder.prototype.traceAreaStepColor = function( startx, starty, color, 
             result = result.concat( this.traceAreaStepColor( startx - 1, starty, color, index, canvasData ) );
         }
 
-        if( result.length > 400 ){
+        if( result.length > 420 ){
             return result;
         }
 
