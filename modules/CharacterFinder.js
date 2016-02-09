@@ -10,8 +10,13 @@ var CharacterFinder = function( filePath ){
     var _this = this;
     this.onCompleteCallbacks = [];
     this.filePath = filePath;
+
+    // Width & height of match area
     this.width = 230;
     this.height = 105;
+
+    // What ypos to start the image. 0 is bottom
+    this.ypos = 205;
 
     console.log( 'Loading ', filePath );
 
@@ -64,8 +69,6 @@ CharacterFinder.prototype.setImg = function( inputImageData ){
 
     this.canvas = new Canvas( this.width, this.height );
     this.context = this.canvas.getContext( '2d' );
-
-    this.ypos = 205;
 
     this.onImgLoad();
 };
