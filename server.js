@@ -372,7 +372,7 @@ app.get( '/channel/*', restrict, function( request, response ){
                     throw error;
                 }
 
-                for( let i = 0; i < rows.length - 1; i = i + 1 ){
+                for( let i = 0; i < rows.length; i = i + 1 ){
                     htmlResponse = htmlResponse + '<a href="/invalidate?id=' + rows[ i ].id + '"><img src="' + getMatchImagePath( rows[ i ].channel, rows[ i ].timestamp ) + '"></a>';
                 }
 
