@@ -154,6 +154,10 @@ CharacterFinder.prototype.onImgLoad = function(){
                     bestAnswerValue = sum;
                 }
 
+                // We can't find a better match
+                if( bestAnswerValue === 0 ){
+                    break;
+                }
             }
 
             // Add special case matching for number area sizes
