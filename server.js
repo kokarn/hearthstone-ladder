@@ -292,7 +292,7 @@ app.get( '/check/*', restrict, function( request, response ){
 });
 
 app.get( '/channel/*', restrict, function( request, response ){
-    var connection = mysql.createConnection({
+    var pool = mysql.createPool({
         host : config.database.host,
         user : config.database.user,
         port: config.database.port,
@@ -300,41 +300,87 @@ app.get( '/channel/*', restrict, function( request, response ){
         database : config.database.name
     });
 
-    connection.connect();
-
-    connection.query( `SELECT
-        id,
-        rank,
-        matches.channel,
-        timestamp,
-        status,
-        name
-        FROM
-            matches
-        LEFT JOIN
-            players
-        ON
-            matches.channel = players.channel
-        WHERE
-            matches.channel = ?
-        ORDER BY
-            matches.timestamp`,
-        request.params[ 0 ],
-        function( error, rows, fields ){
-            var htmlResponse = '';
-            if( error ) {
+    if( request.query.name ){
+        pool.getConnection( function( error, connection ){
+            if( error ){
                 throw error;
             }
 
-            for( let i = 0; i < rows.length - 1; i = i + 1 ){
-                htmlResponse = htmlResponse + '<a href="/invalidate?id=' + rows[ i ].id + '"><img src="' + getMatchImagePath( rows[ i ].channel, rows[ i ].timestamp ) + '"></a>';
+            connection.query(
+                'UPDATE players SET name = ? WHERE channel = ?',
+                [ request.query.name, request.params[ 0 ] ],
+                function( error, rows, fields ){
+                    connection.release();
+                }
+            );
+        });
+    }
+
+    if( request.query.should_index ){
+        pool.getConnection( function( error, connection ){
+            if( error ){
+                throw error;
             }
 
-            response.send( htmlResponse );
-        }
-    );
+            connection.query(
+                'UPDATE players SET should_index = ? WHERE channel = ?',
+                [ request.query.should_index, request.params[ 0 ] ],
+                function( error, rows, fields ){
+                    connection.release();
+                }
+            );
+        });
+    }
 
-    connection.end();
+    pool.getConnection( function( error, connection ){
+        if( error ){
+            throw error;
+        }
+
+        connection.query( `SELECT
+            id,
+            rank,
+            matches.channel,
+            timestamp,
+            status,
+            name,
+            should_index
+            FROM
+            matches
+            LEFT JOIN
+            players
+            ON
+            matches.channel = players.channel
+            WHERE
+            matches.channel = ?
+            ORDER BY
+            matches.timestamp
+            DESC`,
+            request.params[ 0 ],
+            function( error, rows, fields ){
+                if( rows[ 0 ].should_index ){
+                    var shouldIndexQueryParam = '0';
+                } else {
+                    var shouldIndexQueryParam = '1';
+                }
+                var htmlResponse = `<ul>
+                <li>Channel: ${ rows[ 0 ].channel }</li>
+                <li>Name: <form method="get"><input type="text" name="name" value="${ rows[ 0 ].name }"><input type="submit" value="Update"></form></li>
+                <li>Showing: <a href="?should_index=${ shouldIndexQueryParam }">${ rows[ 0 ].should_index }</a></li>
+                </ul>`;
+                if( error ) {
+                    throw error;
+                }
+
+                for( let i = 0; i < rows.length - 1; i = i + 1 ){
+                    htmlResponse = htmlResponse + '<a href="/invalidate?id=' + rows[ i ].id + '"><img src="' + getMatchImagePath( rows[ i ].channel, rows[ i ].timestamp ) + '"></a>';
+                }
+
+                response.send( htmlResponse );
+                connection.release();
+            }
+        );
+    });
 });
 
 app.get( '/cleanup', restrict, function( request, response ){
