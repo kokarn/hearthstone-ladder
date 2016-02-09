@@ -97,7 +97,7 @@ CharacterFinder.prototype.onImgLoad = function(){
     var tracedShapes = this.traceAll( this.color );
 
     for(var i = 0, l = tracedShapes.length; i < l; i++ ){
-        if( tracedShapes[ i ].length < 90 || tracedShapes[ i ].length > 420 ){
+        if( tracedShapes[ i ].length < 90 || tracedShapes[ i ].length > 460 ){
             this.drawPixels( this.context, tracedShapes[ i ], '#000' );
         } else {
             numberShapes.push( tracedShapes[ i ] );
@@ -300,7 +300,7 @@ CharacterFinder.prototype.traceAreaStepColor = function( startx, starty, color, 
             result = result.concat( this.traceAreaStepColor( startx + 1, starty, color, index, canvasData ) );
         }
 
-        if( result.length > 420 ){
+        if( result.length > 460 ){
             return result;
         }
 
@@ -308,7 +308,7 @@ CharacterFinder.prototype.traceAreaStepColor = function( startx, starty, color, 
             result = result.concat( this.traceAreaStepColor( startx, starty + 1, color, index, canvasData ) );
         }
 
-        if( result.length > 420 ){
+        if( result.length > 460 ){
             return result;
         }
 
@@ -316,7 +316,7 @@ CharacterFinder.prototype.traceAreaStepColor = function( startx, starty, color, 
             result = result.concat( this.traceAreaStepColor( startx - 1, starty, color, index, canvasData ) );
         }
 
-        if( result.length > 420 ){
+        if( result.length > 460 ){
             return result;
         }
 
