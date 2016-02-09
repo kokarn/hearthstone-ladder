@@ -147,7 +147,7 @@ CharacterFinder.prototype.onImgLoad = function(){
             }
 
             // Add special case matching for number area sizes
-            if( bestAnswer === 1 && numberShapes[ i ].length < 115 ){
+            if( bestAnswer === 1 && numberShapes[ i ].length < 110 ){
                 continue;
             } else if( bestAnswer === 2 && boundaries.ymax - boundaries.ymin < 20 ){
                 continue;
