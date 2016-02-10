@@ -123,7 +123,9 @@ class RankChart extends React.Component {
                     <TableRowColumn
                         colSpan = { colspan }
                     >
-                        <LinearProgress mode="indeterminate"/>
+                        <LinearProgress
+                            mode = "indeterminate"
+                        />
                     </TableRowColumn>
                 </TableRow>
             );

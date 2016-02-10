@@ -412,7 +412,9 @@ var RankChart = function (_React$Component) {
                         {
                             colSpan: colspan
                         },
-                        _react2.default.createElement(_linearProgress2.default, { mode: 'indeterminate' })
+                        _react2.default.createElement(_linearProgress2.default, {
+                            mode: 'indeterminate'
+                        })
                     )
                 );
             }
