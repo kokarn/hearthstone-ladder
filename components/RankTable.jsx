@@ -165,7 +165,7 @@ class RankTable extends React.Component {
 
         let statusNode = (
             <TableHeaderColumn>
-                { 'Status' }
+                { 'Stream title' }
             </TableHeaderColumn>
         );
 
@@ -181,7 +181,7 @@ class RankTable extends React.Component {
             },
             graph: {
                 textAlign: 'right',
-                width: '10%'
+                width: '11%'
             }
         };
 
@@ -192,7 +192,7 @@ class RankTable extends React.Component {
             delete columnStyles.name.width;
             delete columnStyles.age.width;
 
-            columnStyles.graph.width = '32px';
+            columnStyles.graph.width = '65px';
         }
 
         return (
@@ -226,7 +226,7 @@ class RankTable extends React.Component {
                         <TableHeaderColumn
                             style = { columnStyles.graph }
                         >
-                            { 'Graph' }
+                            { 'Progression' }
                         </TableHeaderColumn>
                     </TableRow>
                 </TableHeader>

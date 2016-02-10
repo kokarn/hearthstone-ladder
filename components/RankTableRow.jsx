@@ -56,7 +56,7 @@ class RankTableRow extends React.Component {
             },
             graph: {
                 textAlign: 'right',
-                width: '10%'
+                width: '11%'
             }
         };
 

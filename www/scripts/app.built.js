@@ -836,7 +836,7 @@ var RankTable = function (_React$Component) {
             var statusNode = _react2.default.createElement(
                 _tableHeaderColumn2.default,
                 null,
-                'Status'
+                'Stream title'
             );
 
             var columnStyles = {
@@ -851,7 +851,7 @@ var RankTable = function (_React$Component) {
                 },
                 graph: {
                     textAlign: 'right',
-                    width: '10%'
+                    width: '11%'
                 }
             };
 
@@ -862,7 +862,7 @@ var RankTable = function (_React$Component) {
                 delete columnStyles.name.width;
                 delete columnStyles.age.width;
 
-                columnStyles.graph.width = '32px';
+                columnStyles.graph.width = '65px';
             }
 
             return _react2.default.createElement(
@@ -909,7 +909,7 @@ var RankTable = function (_React$Component) {
                             {
                                 style: columnStyles.graph
                             },
-                            'Graph'
+                            'Progression'
                         )
                     )
                 ),
@@ -1032,7 +1032,7 @@ var RankTableRow = function (_React$Component) {
                 },
                 graph: {
                     textAlign: 'right',
-                    width: '10%'
+                    width: '11%'
                 }
             };
 
