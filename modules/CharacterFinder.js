@@ -26,6 +26,10 @@ var CharacterFinder = function( filePath ){
         a: 1
     });
 
+    // Sizes required for a bounding box to be valid
+    this.boundingBoxMinHeight = 18;
+    this.boundingBoxMaxWidth = 25;
+
     console.log( 'Loading ', filePath );
 
     // This doesn't work for some reason, callstack get's exceeded
@@ -112,8 +116,8 @@ CharacterFinder.prototype.onImgLoad = function(){
 
         if(
             boundaries.ymin !== 0 &&
-            boundaries.xmax - boundaries.xmin < 25 &&
-            boundaries.ymax - boundaries.ymin > 18 &&
+            boundaries.xmax - boundaries.xmin < this.boundingBoxMaxWidth &&
+            boundaries.ymax - boundaries.ymin > this.boundingBoxMinHeight &&
             ( boundaries.ymax - boundaries.ymin ) / ( boundaries.xmax - boundaries.xmin ) >= 0.95 &&
             ( boundaries.ymax - boundaries.ymin ) / ( boundaries.xmax - boundaries.xmin ) < 1.9 &&
             ( boundaries.ymax - boundaries.ymin ) > 15 &&
