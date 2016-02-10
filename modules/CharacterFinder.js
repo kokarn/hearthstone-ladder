@@ -191,7 +191,7 @@ CharacterFinder.prototype.onImgLoad = function(){
                 continue;
             } else if( bestAnswer === 7 && ( numberShapes[ i ].length < 140 || boundaries.ymax - boundaries.ymin < 22 ) ){
                 continue;
-            } else if( bestAnswer === 8 && numberShapes[ i ].length > 420 ){
+            } else if( bestAnswer === 8 && numberShapes[ i ].length > 430 ){
                 continue;
             }
 
