@@ -132,7 +132,6 @@ var Filter = function (_React$Component) {
                     fullWidth: true,
                     hintText: 'Channel or player name',
                     onChange: this.handleGotFieldChange,
-                    ref: 'player',
                     value: this.state.value
                 }),
                 clearButton

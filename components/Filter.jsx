@@ -68,7 +68,6 @@ class Filter extends React.Component {
                     fullWidth
                     hintText = "Channel or player name"
                     onChange = { this.handleGotFieldChange }
-                    ref = "player"
                     value = { this.state.value }
                 />
                 { clearButton }
