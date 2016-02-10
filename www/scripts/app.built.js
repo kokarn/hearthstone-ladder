@@ -553,7 +553,8 @@ var RankChartTooltip = function (_React$Component) {
                         border: 0,
                         borderRadius: '4px',
                         padding: '35px 10px 10px 10px',
-                        minWidth: '175px'
+                        minWidth: '175px',
+                        maxWidth: '300px'
                     }
                 },
                 _react2.default.createElement(
@@ -583,7 +584,9 @@ var RankChartTooltip = function (_React$Component) {
                     'div',
                     {
                         style: {
-                            color: 'white'
+                            color: 'white',
+                            whiteSpace: 'normal',
+                            width: '100%'
                         }
                     },
                     this.props.dataset[index].status

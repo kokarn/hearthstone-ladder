@@ -23,7 +23,8 @@ class RankChartTooltip extends React.Component {
                     border: 0,
                     borderRadius: '4px',
                     padding: '35px 10px 10px 10px',
-                    minWidth: '175px'
+                    minWidth: '175px',
+                    maxWidth: '300px'
                 } }
             >
                 <div
@@ -49,7 +50,9 @@ class RankChartTooltip extends React.Component {
                 />
                 <div
                     style = { {
-                        color: 'white'
+                        color: 'white',
+                        whiteSpace: 'normal',
+                        width: '100%'
                     } }
                 >
                     { this.props.dataset[ index ].status }
