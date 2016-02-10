@@ -1,7 +1,7 @@
 # Development
 To setup local build of main js
 ```shell
-npm install --dev
+npm install --only=dev
 grunt watch
 ```
 
