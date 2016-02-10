@@ -17,8 +17,7 @@ import Paper from 'material-ui/lib/paper';
 class RankChart extends React.Component {
     constructor( props ){
         super( props );
-
-        this.state = {
+        let defaultState = {
             width: props.componentWidth - 20,
             margins: {
                 top: 25,
@@ -34,14 +33,16 @@ class RankChart extends React.Component {
                 }
             ],
             chartData: []
-        }
+        };
 
         if( props.componentWidth <= 768 ){
-            this.state.height = 150;
+            defaultState.height = 150;
         } else {
-            this.state.height = 250;
+            defaultState.height = 250;
 
         }
+
+        this.state = defaultState;
     }
 
     componentWillReceiveProps( nextProps ){

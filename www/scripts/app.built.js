@@ -302,7 +302,7 @@ var RankChart = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(RankChart).call(this, props));
 
-        _this.state = {
+        var defaultState = {
             width: props.componentWidth - 20,
             margins: {
                 top: 25,
@@ -319,10 +319,12 @@ var RankChart = function (_React$Component) {
         };
 
         if (props.componentWidth <= 768) {
-            _this.state.height = 150;
+            defaultState.height = 150;
         } else {
-            _this.state.height = 250;
+            defaultState.height = 250;
         }
+
+        _this.state = defaultState;
         return _this;
     }
 
