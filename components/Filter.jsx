@@ -12,15 +12,15 @@ class Filter extends React.Component {
             value: ''
         };
 
-        this.clearValue = this.clearValue.bind( this );
-        this.gotFieldChange = this.gotFieldChange.bind( this );
+        this.handleClearValue = this.handleClearValue.bind( this );
+        this.handleGotFieldChange = this.handleGotFieldChange.bind( this );
     }
 
-    gotFieldChange( event ){
+    handleGotFieldChange( event ){
         this.updateValue( event.target.value );
     }
 
-    clearValue(){
+    handleClearValue(){
         this.updateValue( '' );
     }
 
@@ -29,7 +29,7 @@ class Filter extends React.Component {
             value: value
         });
 
-        this.props.handlePlayerChange( value );
+        this.props.onPlayerChange( value );
     }
 
     render(){
@@ -37,7 +37,7 @@ class Filter extends React.Component {
         if( this.state.value !== '' ){
             clearButton = (
                 <IconButton
-                    onClick = { this.clearValue }
+                    onClick = { this.handleClearValue }
                     style = { {
                         bottom: 0,
                         position: 'absolute',
@@ -67,7 +67,7 @@ class Filter extends React.Component {
                     floatingLabelText = "Search player"
                     fullWidth
                     hintText = "Channel or player name"
-                    onChange = { this.gotFieldChange }
+                    onChange = { this.handleGotFieldChange }
                     ref = "player"
                     value = { this.state.value }
                 />
@@ -79,7 +79,7 @@ class Filter extends React.Component {
 
 Filter.displayName = 'Filter';
 Filter.propTypes = {
-    handlePlayerChange: React.PropTypes.func.isRequired
+    onPlayerChange: React.PropTypes.func.isRequired
 };
 
 export default Filter;

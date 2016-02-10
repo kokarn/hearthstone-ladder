@@ -23,7 +23,7 @@ class RankTable extends React.Component {
             sortBy: 'rank'
         };
 
-        this.toggleGraphClick = this.toggleGraphClick.bind( this );
+        this.handleToggleGraphClick = this.handleToggleGraphClick.bind( this );
     }
 
     componentDidMount() {
@@ -94,7 +94,7 @@ class RankTable extends React.Component {
         });
     }
 
-    toggleGraphClick( channel ){
+    handleToggleGraphClick( channel ){
         for( let i = 0; i < this.state.data.length; i = i + 1 ){
             if( this.state.data[ i ].channel === channel ){
                 let updateState = {};
@@ -127,7 +127,7 @@ class RankTable extends React.Component {
                     key = { legendRank.channel + '-' + legendRank.timestamp }
                     matchCount = { legendRank.total_matches }
                     name = { legendRank.name || '' }
-                    onToggleGraphClick = { this.toggleGraphClick }
+                    onToggleGraphClick = { this.handleToggleGraphClick }
                     rank = { legendRank.rank }
                     status = { legendRank.status }
                     timestamp = { legendRank.timestamp }

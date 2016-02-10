@@ -67,19 +67,19 @@ var Filter = function (_React$Component) {
             value: ''
         };
 
-        _this.clearValue = _this.clearValue.bind(_this);
-        _this.gotFieldChange = _this.gotFieldChange.bind(_this);
+        _this.handleClearValue = _this.handleClearValue.bind(_this);
+        _this.handleGotFieldChange = _this.handleGotFieldChange.bind(_this);
         return _this;
     }
 
     _createClass(Filter, [{
-        key: 'gotFieldChange',
-        value: function gotFieldChange(event) {
+        key: 'handleGotFieldChange',
+        value: function handleGotFieldChange(event) {
             this.updateValue(event.target.value);
         }
     }, {
-        key: 'clearValue',
-        value: function clearValue() {
+        key: 'handleClearValue',
+        value: function handleClearValue() {
             this.updateValue('');
         }
     }, {
@@ -89,7 +89,7 @@ var Filter = function (_React$Component) {
                 value: value
             });
 
-            this.props.handlePlayerChange(value);
+            this.props.onPlayerChange(value);
         }
     }, {
         key: 'render',
@@ -99,7 +99,7 @@ var Filter = function (_React$Component) {
                 clearButton = _react2.default.createElement(
                     _iconButton2.default,
                     {
-                        onClick: this.clearValue,
+                        onClick: this.handleClearValue,
                         style: {
                             bottom: 0,
                             position: 'absolute',
@@ -131,7 +131,7 @@ var Filter = function (_React$Component) {
                     floatingLabelText: 'Search player',
                     fullWidth: true,
                     hintText: 'Channel or player name',
-                    onChange: this.gotFieldChange,
+                    onChange: this.handleGotFieldChange,
                     ref: 'player',
                     value: this.state.value
                 }),
@@ -145,7 +145,7 @@ var Filter = function (_React$Component) {
 
 Filter.displayName = 'Filter';
 Filter.propTypes = {
-    handlePlayerChange: _react2.default.PropTypes.func.isRequired
+    onPlayerChange: _react2.default.PropTypes.func.isRequired
 };
 
 exports.default = Filter;
@@ -226,7 +226,7 @@ var MainWrapper = function (_React$Component) {
                     'Hearthstone legend ladder ranks'
                 ),
                 _react2.default.createElement(_Filter2.default, {
-                    handlePlayerChange: this.handlePlayerChange
+                    onPlayerChange: this.handlePlayerChange
                 }),
                 _react2.default.createElement(_RankTable2.default, {
                     playerName: this.state.playerText
@@ -689,7 +689,7 @@ var RankTable = function (_React$Component) {
             sortBy: 'rank'
         };
 
-        _this.toggleGraphClick = _this.toggleGraphClick.bind(_this);
+        _this.handleToggleGraphClick = _this.handleToggleGraphClick.bind(_this);
         return _this;
     }
 
@@ -771,8 +771,8 @@ var RankTable = function (_React$Component) {
             });
         }
     }, {
-        key: 'toggleGraphClick',
-        value: function toggleGraphClick(channel) {
+        key: 'handleToggleGraphClick',
+        value: function handleToggleGraphClick(channel) {
             for (var i = 0; i < this.state.data.length; i = i + 1) {
                 if (this.state.data[i].channel === channel) {
                     var updateState = {};
@@ -806,7 +806,7 @@ var RankTable = function (_React$Component) {
                     key: legendRank.channel + '-' + legendRank.timestamp,
                     matchCount: legendRank.total_matches,
                     name: legendRank.name || '',
-                    onToggleGraphClick: _this4.toggleGraphClick,
+                    onToggleGraphClick: _this4.handleToggleGraphClick,
                     rank: legendRank.rank,
                     status: legendRank.status,
                     timestamp: legendRank.timestamp

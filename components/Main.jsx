@@ -38,7 +38,7 @@ class MainWrapper extends React.Component {
                     Hearthstone legend ladder ranks
                 </h1>
                 <Filter
-                    handlePlayerChange = { this.handlePlayerChange }
+                    onPlayerChange = { this.handlePlayerChange }
                 />
                 <RankTable
                     playerName = { this.state.playerText }
