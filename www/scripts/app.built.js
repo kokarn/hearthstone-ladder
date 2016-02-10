@@ -844,18 +844,18 @@ var RankTable = function (_React$Component) {
                     width: '10px'
                 },
                 name: {
-                    width: '15%'
+                    width: '17%'
                 },
                 age: {
-                    width: '15%'
+                    width: '17%'
                 },
                 graph: {
                     textAlign: 'right',
-                    width: '11%'
+                    width: '13%'
                 }
             };
 
-            if (this.state.componentWidth <= 768) {
+            if (this.state.componentWidth <= 748) {
                 statusNode = false;
 
                 // Delete all special width settings
@@ -863,6 +863,19 @@ var RankTable = function (_React$Component) {
                 delete columnStyles.age.width;
 
                 columnStyles.graph.width = '65px';
+
+                columnStyles.rank.paddingLeft = '12px';
+                columnStyles.rank.paddingRight = '12px';
+
+                columnStyles.name.paddingLeft = '12px';
+                columnStyles.name.paddingRight = '12px';
+
+                columnStyles.age.paddingLeft = '12px';
+                columnStyles.age.paddingRight = '12px';
+                columnStyles.age.left = '16px';
+
+                columnStyles.graph.paddingLeft = '12px';
+                columnStyles.graph.paddingRight = '12px';
             }
 
             return _react2.default.createElement(
@@ -915,9 +928,7 @@ var RankTable = function (_React$Component) {
                 ),
                 _react2.default.createElement(
                     _tableBody2.default,
-                    {
-                        showRowHover: true
-                    },
+                    null,
                     rankAndGraphNodes
                 )
             );
@@ -1025,10 +1036,10 @@ var RankTableRow = function (_React$Component) {
                     width: '10px'
                 },
                 name: {
-                    width: '15%'
+                    width: '17%'
                 },
                 age: {
-                    width: '15%'
+                    width: '17%'
                 },
                 graph: {
                     textAlign: 'right',
@@ -1041,7 +1052,7 @@ var RankTableRow = function (_React$Component) {
                 position: 'relative'
             };
 
-            if (this.props.componentWidth <= 768) {
+            if (this.props.componentWidth <= 748) {
                 statusNode = false;
 
                 // Delete all special width settings
@@ -1052,6 +1063,18 @@ var RankTableRow = function (_React$Component) {
 
                 // Switch the icon position to align with the header
                 iconStyle.left = '-4px';
+
+                columnStyles.rank.paddingLeft = '12px';
+                columnStyles.rank.paddingRight = '12px';
+
+                columnStyles.name.paddingLeft = '12px';
+                columnStyles.name.paddingRight = '12px';
+
+                columnStyles.age.paddingLeft = '12px';
+                columnStyles.age.paddingRight = '12px';
+
+                columnStyles.graph.paddingLeft = '12px';
+                columnStyles.graph.paddingRight = '12px';
             }
 
             if (this.props.matchCount < 2) {
@@ -1096,7 +1119,9 @@ var RankTableRow = function (_React$Component) {
 
             return _react2.default.createElement(
                 _tableRow2.default,
-                null,
+                {
+                    hoverable: true
+                },
                 _react2.default.createElement(
                     _tableRowColumn2.default,
                     {

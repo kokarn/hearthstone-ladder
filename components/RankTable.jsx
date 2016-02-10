@@ -174,18 +174,18 @@ class RankTable extends React.Component {
                 width: '10px'
             },
             name: {
-                width: '15%'
+                width: '17%'
             },
             age: {
-                width: '15%'
+                width: '17%'
             },
             graph: {
                 textAlign: 'right',
-                width: '11%'
+                width: '13%'
             }
         };
 
-        if( this.state.componentWidth <= 768 ){
+        if( this.state.componentWidth <= 748 ){
             statusNode = false;
 
             // Delete all special width settings
@@ -193,6 +193,19 @@ class RankTable extends React.Component {
             delete columnStyles.age.width;
 
             columnStyles.graph.width = '65px';
+
+            columnStyles.rank.paddingLeft = '12px';
+            columnStyles.rank.paddingRight = '12px';
+
+            columnStyles.name.paddingLeft = '12px';
+            columnStyles.name.paddingRight = '12px';
+
+            columnStyles.age.paddingLeft = '12px';
+            columnStyles.age.paddingRight = '12px';
+            columnStyles.age.left = '16px';
+
+            columnStyles.graph.paddingLeft = '12px';
+            columnStyles.graph.paddingRight = '12px';
         }
 
         return (
@@ -230,9 +243,7 @@ class RankTable extends React.Component {
                         </TableHeaderColumn>
                     </TableRow>
                 </TableHeader>
-                <TableBody
-                    showRowHover
-                >
+                <TableBody>
                     { rankAndGraphNodes }
                 </TableBody>
             </Table>
