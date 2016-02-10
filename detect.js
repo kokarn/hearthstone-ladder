@@ -49,7 +49,7 @@ function addPlayer( channel ){
             };
 
             if( typeof rows === 'undefined' || rows[ 0 ][ 'COUNT(*)' ] <= 0 ){
-                console.log( 'channel', channel, 'doesnt exists as a player' );
+                console.log( 'Added new player:', channel );
                 connection.query( `INSERT INTO players SET ?`, createData, function( error, rows, fields ){
                     if( error ){
                         throw error;
@@ -58,7 +58,7 @@ function addPlayer( channel ){
                     connection.release();
                 });
             } else {
-                console.log( 'channel', channel, 'already exists as a player' );
+                console.log( channel, 'already exists as a player' );
                 connection.release();
             }
         });
