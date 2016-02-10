@@ -171,7 +171,7 @@ CharacterFinder.prototype.onImgLoad = function(){
                 }
 
                 // We can't find a better match
-                if( bestAnswerValue === 0 ){
+                if( bestAnswerValue === 0 && bestAnswer !== 5 ){
                     break;
                 }
             }
