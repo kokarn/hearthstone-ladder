@@ -9,6 +9,7 @@ var express = require( 'express' );
 var session = require( 'express-session' );
 var bodyParser = require( 'body-parser' );
 var hash = require( './modules/pass.js' ).hash;
+var compress = require( 'compression' );
 
 var config = require( './config.js' );
 var hearthstone = require( './modules/Hearthstone.js' );
@@ -18,7 +19,10 @@ var users = {
         name: 'kokarn'
     }
 };
+
 var app = express();
+
+app.use( compress() );
 
 app.use( express.static( path.join( __dirname, '/www' ) ) );
 
