@@ -66,6 +66,9 @@ var Filter = function (_React$Component) {
         _this.state = {
             value: ''
         };
+
+        _this.clearValue = _this.clearValue.bind(_this);
+        _this.gotFieldChange = _this.gotFieldChange.bind(_this);
         return _this;
     }
 
@@ -73,6 +76,11 @@ var Filter = function (_React$Component) {
         key: 'gotFieldChange',
         value: function gotFieldChange(event) {
             this.updateValue(event.target.value);
+        }
+    }, {
+        key: 'clearValue',
+        value: function clearValue() {
+            this.updateValue('');
         }
     }, {
         key: 'updateValue',
@@ -91,7 +99,7 @@ var Filter = function (_React$Component) {
                 clearButton = _react2.default.createElement(
                     _iconButton2.default,
                     {
-                        onClick: this.updateValue.bind(this, ''),
+                        onClick: this.clearValue,
                         style: {
                             bottom: 0,
                             position: 'absolute',
@@ -123,7 +131,7 @@ var Filter = function (_React$Component) {
                     floatingLabelText: 'Search player',
                     fullWidth: true,
                     hintText: 'Channel or player name',
-                    onChange: this.gotFieldChange.bind(this),
+                    onChange: this.gotFieldChange,
                     ref: 'player',
                     value: this.state.value
                 }),
@@ -182,6 +190,8 @@ var MainWrapper = function (_React$Component) {
         _this.state = {
             playerText: ''
         };
+
+        _this.handlePlayerChange = _this.handlePlayerChange.bind(_this);
         return _this;
     }
 
@@ -216,7 +226,7 @@ var MainWrapper = function (_React$Component) {
                     'Hearthstone legend ladder ranks'
                 ),
                 _react2.default.createElement(_Filter2.default, {
-                    handlePlayerChange: this.handlePlayerChange.bind(this)
+                    handlePlayerChange: this.handlePlayerChange
                 }),
                 _react2.default.createElement(_RankTable2.default, {
                     playerName: this.state.playerText
@@ -676,6 +686,8 @@ var RankTable = function (_React$Component) {
             data: [],
             sortBy: 'rank'
         };
+
+        _this.toggleGraphClick = _this.toggleGraphClick.bind(_this);
         return _this;
     }
 
@@ -792,7 +804,7 @@ var RankTable = function (_React$Component) {
                     key: legendRank.channel + '-' + legendRank.timestamp,
                     matchCount: legendRank.total_matches,
                     name: legendRank.name || '',
-                    onToggleGraphClick: _this4.toggleGraphClick.bind(_this4),
+                    onToggleGraphClick: _this4.toggleGraphClick,
                     rank: legendRank.rank,
                     status: legendRank.status,
                     timestamp: legendRank.timestamp
@@ -978,6 +990,8 @@ var RankTableRow = function (_React$Component) {
         _this.state = {
             showingGraph: false
         };
+
+        _this.handleToggleGraphClick = _this.handleToggleGraphClick.bind(_this);
         return _this;
     }
 
@@ -1050,7 +1064,7 @@ var RankTableRow = function (_React$Component) {
                     _iconButton2.default,
                     {
                         disabled: true,
-                        onClick: this.handleToggleGraphClick.bind(this),
+                        onClick: this.handleToggleGraphClick,
                         style: iconStyle
                     },
                     _react2.default.createElement(
@@ -1070,7 +1084,7 @@ var RankTableRow = function (_React$Component) {
                 icon = _react2.default.createElement(
                     _iconButton2.default,
                     {
-                        onClick: this.handleToggleGraphClick.bind(this),
+                        onClick: this.handleToggleGraphClick,
                         style: iconStyle
                     },
                     _react2.default.createElement(

@@ -22,6 +22,8 @@ class RankTable extends React.Component {
             data: [],
             sortBy: 'rank'
         };
+
+        this.toggleGraphClick = this.toggleGraphClick.bind( this );
     }
 
     componentDidMount() {
@@ -125,7 +127,7 @@ class RankTable extends React.Component {
                     key = { legendRank.channel + '-' + legendRank.timestamp }
                     matchCount = { legendRank.total_matches }
                     name = { legendRank.name || '' }
-                    onToggleGraphClick = { this.toggleGraphClick.bind( this ) }
+                    onToggleGraphClick = { this.toggleGraphClick }
                     rank = { legendRank.rank }
                     status = { legendRank.status }
                     timestamp = { legendRank.timestamp }

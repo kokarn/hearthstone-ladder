@@ -9,6 +9,8 @@ class MainWrapper extends React.Component {
         this.state = {
             playerText: ''
         };
+
+        this.handlePlayerChange = this.handlePlayerChange.bind( this );
     }
 
     handlePlayerChange( playerText ){
@@ -36,7 +38,7 @@ class MainWrapper extends React.Component {
                     Hearthstone legend ladder ranks
                 </h1>
                 <Filter
-                    handlePlayerChange = { this.handlePlayerChange.bind( this ) }
+                    handlePlayerChange = { this.handlePlayerChange }
                 />
                 <RankTable
                     playerName = { this.state.playerText }

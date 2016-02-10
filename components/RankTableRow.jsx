@@ -13,6 +13,8 @@ class RankTableRow extends React.Component {
         this.state = {
             showingGraph: false
         };
+
+        this.handleToggleGraphClick = this.handleToggleGraphClick.bind( this );
     }
 
     handleToggleGraphClick(){
@@ -80,7 +82,7 @@ class RankTableRow extends React.Component {
             icon = (
                 <IconButton
                     disabled
-                    onClick = { this.handleToggleGraphClick.bind( this ) }
+                    onClick = { this.handleToggleGraphClick }
                     style = { iconStyle }
                 >
                     <FontIcon
@@ -98,7 +100,7 @@ class RankTableRow extends React.Component {
 
             icon = (
                 <IconButton
-                    onClick = { this.handleToggleGraphClick.bind( this ) }
+                    onClick = { this.handleToggleGraphClick }
                     style = { iconStyle }
                 >
                     <FontIcon

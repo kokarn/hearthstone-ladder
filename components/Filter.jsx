@@ -11,10 +11,17 @@ class Filter extends React.Component {
         this.state = {
             value: ''
         };
+
+        this.clearValue = this.clearValue.bind( this );
+        this.gotFieldChange = this.gotFieldChange.bind( this );
     }
 
     gotFieldChange( event ){
         this.updateValue( event.target.value );
+    }
+
+    clearValue(){
+        this.updateValue( '' );
     }
 
     updateValue( value ){
@@ -30,7 +37,7 @@ class Filter extends React.Component {
         if( this.state.value !== '' ){
             clearButton = (
                 <IconButton
-                    onClick = { this.updateValue.bind( this, '' ) }
+                    onClick = { this.clearValue }
                     style = { {
                         bottom: 0,
                         position: 'absolute',
@@ -60,7 +67,7 @@ class Filter extends React.Component {
                     floatingLabelText = "Search player"
                     fullWidth
                     hintText = "Channel or player name"
-                    onChange = { this.gotFieldChange.bind( this ) }
+                    onChange = { this.gotFieldChange }
                     ref = "player"
                     value = { this.state.value }
                 />
