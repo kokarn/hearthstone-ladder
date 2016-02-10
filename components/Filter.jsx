@@ -48,7 +48,7 @@ class Filter extends React.Component {
                     <FontIcon
                         className = "material-icons"
                     >
-                        clear
+                        { 'clear' }
                     </FontIcon>
                 </IconButton>
             );

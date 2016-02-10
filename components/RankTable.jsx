@@ -165,7 +165,7 @@ class RankTable extends React.Component {
 
         let statusNode = (
             <TableHeaderColumn>
-                Status
+                { 'Status' }
             </TableHeaderColumn>
         );
 
@@ -210,23 +210,23 @@ class RankTable extends React.Component {
                         <TableHeaderColumn
                             style = { columnStyles.rank }
                         >
-                            Rank
+                            { 'Rank' }
                         </TableHeaderColumn>
                         <TableHeaderColumn
                             style = { columnStyles.name }
                         >
-                            Name
+                            { 'Name' }
                         </TableHeaderColumn>
                         <TableHeaderColumn
                             style = { columnStyles.age }
                         >
-                            Last update
+                            { 'Last update' }
                         </TableHeaderColumn>
                         { statusNode }
                         <TableHeaderColumn
                             style = { columnStyles.graph }
                         >
-                            Graph
+                            { 'Graph' }
                         </TableHeaderColumn>
                     </TableRow>
                 </TableHeader>

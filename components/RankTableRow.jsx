@@ -88,7 +88,7 @@ class RankTableRow extends React.Component {
                     <FontIcon
                         className = "material-icons"
                     >
-                        timeline
+                        { 'timeline' }
                     </FontIcon>
                 </IconButton>
             );
@@ -108,7 +108,7 @@ class RankTableRow extends React.Component {
                         color = { color }
                         hoverColor = { hoverColor }
                     >
-                        timeline
+                        { 'timeline' }
                     </FontIcon>
                 </IconButton>
             );

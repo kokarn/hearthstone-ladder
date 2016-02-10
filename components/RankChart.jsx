@@ -137,7 +137,7 @@ class RankChart extends React.Component {
                     <TableRowColumn
                         colSpan = { colspan }
                     >
-                        Not enough data
+                        { 'Not enough data' }
                     </TableRowColumn>
                 </TableRow>
             );
