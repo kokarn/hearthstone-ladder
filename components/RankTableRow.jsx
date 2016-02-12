@@ -7,14 +7,30 @@ import IconButton from 'material-ui/lib/icon-button';
 import FontIcon from 'material-ui/lib/font-icon';
 
 class RankTableRow extends React.Component {
-    constructor( props ){
-        super( props );
+    constructor( props, context ){
+        super( props, context );
 
         this.state = {
+            muiTheme: this.context.muiTheme,
             showingGraph: false
         };
 
         this.handleToggleGraphClick = this.handleToggleGraphClick.bind( this );
+    }
+
+    getChildContext(){
+        return {
+            muiTheme: this.state.muiTheme
+        }
+    }
+
+    componentWillMount(){
+        let newMuiTheme = this.state.muiTheme;
+        newMuiTheme.tableRow.stripeColor = '#F9F9F9';
+
+        this.setState({
+            muiTheme: newMuiTheme
+        });
     }
 
     handleToggleGraphClick(){
@@ -129,6 +145,7 @@ class RankTableRow extends React.Component {
         return (
             <TableRow
                 hoverable
+                striped = { this.props.customStriped }
             >
                 <TableRowColumn
                     style = { columnStyles.rank }
@@ -164,10 +181,20 @@ class RankTableRow extends React.Component {
     }
 }
 
+RankTableRow.contextTypes = {
+    muiTheme: React.PropTypes.object
+};
+
+RankTableRow.childContextTypes = {
+    muiTheme: React.PropTypes.object
+};
+
 RankTableRow.displayName = 'RankTableRow';
+
 RankTableRow.propTypes = {
     channel: React.PropTypes.string.isRequired,
     componentWidth: React.PropTypes.number.isRequired,
+    customStriped: React.PropTypes.bool.isRequired,
     id: React.PropTypes.number.isRequired,
     matchCount: React.PropTypes.number.isRequired,
     name: React.PropTypes.string.isRequired,

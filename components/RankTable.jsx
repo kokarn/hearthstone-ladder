@@ -118,11 +118,14 @@ class RankTable extends React.Component {
 
     render() {
         let rankAndGraphNodes = [];
-        let rankNodes = this.state.data.map(( legendRank ) => {
+        let rankNodes = this.state.data.map(( legendRank, index ) => {
+            legendRank.striped = Boolean( index % 2 );
+
             return (
                 <RankTableRow
                     channel = { legendRank.channel }
                     componentWidth = { this.state.componentWidth }
+                    customStriped = { legendRank.striped }
                     id = { legendRank.id }
                     key = { legendRank.channel + '-' + legendRank.timestamp }
                     matchCount = { legendRank.total_matches }
@@ -210,6 +213,7 @@ class RankTable extends React.Component {
 
         return (
             <Table
+                selectable = { false }
                 wrapperStyle = { {
                     margin: '0 auto',
                     maxWidth: '1024px'
@@ -243,7 +247,9 @@ class RankTable extends React.Component {
                         </TableHeaderColumn>
                     </TableRow>
                 </TableHeader>
-                <TableBody>
+                <TableBody
+                    preScanRows = { false }
+                >
                     { rankAndGraphNodes }
                 </TableBody>
             </Table>

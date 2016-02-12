@@ -2,6 +2,8 @@ import React from 'react';
 import RankTable from './RankTable';
 import Filter from './Filter';
 
+import Paper from 'material-ui/lib/paper';
+
 class MainWrapper extends React.Component {
     constructor( props ){
         super( props );
@@ -11,6 +13,14 @@ class MainWrapper extends React.Component {
         };
 
         this.handlePlayerChange = this.handlePlayerChange.bind( this );
+
+        this.wrapperStyle = {
+            margin: '-10px auto 0 auto',
+            maxWidth: '1024px',
+            paddingBottom: '30px',
+            paddingLeft: '20px',
+            paddingRight: '20px'
+        };
     }
 
     handlePlayerChange( playerText ){
@@ -23,7 +33,11 @@ class MainWrapper extends React.Component {
 
     render(){
         return (
-            <div>
+            <Paper
+                rounded = { false }
+                style = { this.wrapperStyle }
+                zDepth = { 2 }
+            >
                 <h1
                     style = { {
                         fontFamily: 'Roboto, serif',
@@ -43,7 +57,7 @@ class MainWrapper extends React.Component {
                 <RankTable
                     playerName = { this.state.playerText }
                 />
-            </div>
+            </Paper>
         );
     }
 }
