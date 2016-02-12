@@ -421,7 +421,7 @@ app.get( '/cleanup', restrict, function( request, response ){
             timestamp
         DESC
         LIMIT
-            1000`,
+            500`,
         function( error, rows, fields ){
             if( error ) {
                 throw error;
