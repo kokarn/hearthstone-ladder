@@ -428,7 +428,7 @@ app.get( '/cleanup', restrict, function( request, response ){
             }
 
             for( let i = 0; i < rows.length - 1; i = i + 1 ){
-                htmlResponse = htmlResponse + '<a href="/invalidate?id=' + rows[ i ].id + '"><img src="' + getMatchImagePath( rows[ i ].channel, rows[ i ].timestamp ) + '"></a>';
+                htmlResponse = htmlResponse + '<a href="/invalidate?id=' + rows[ i ].id + '&channel=' + rows[ i ].channel + '"><img src="' + getMatchImagePath( rows[ i ].channel, rows[ i ].timestamp ) + '"></a>';
             }
 
             response.send( htmlResponse );
