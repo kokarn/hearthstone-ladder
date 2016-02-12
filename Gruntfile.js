@@ -7,8 +7,7 @@ module.exports = function( grunt ) {
         watch: {
             react: {
                 files: 'components/*.jsx',
-                // tasks: [ 'env:dev', 'eslint:components', 'browserify' ]
-                tasks: [ 'eslint:components', 'browserify', 'uglify' ]
+                tasks: [ 'production', 'development' ]
             }
         },
 
@@ -51,4 +50,7 @@ module.exports = function( grunt ) {
     });
 
     require( 'load-grunt-tasks' )( grunt );
+
+    grunt.registerTask( 'development', [ 'env:dev', 'browserify' ] );
+    grunt.registerTask( 'production', [ 'eslint:components', 'browserify', 'uglify' ] );
 };
