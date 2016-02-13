@@ -40,16 +40,19 @@ class MainWrapper extends React.Component {
             >
                 <h1
                     style = { {
-                        fontFamily: 'Roboto, serif',
-                        fontSize: 24,
-                        fontWeight: 400,
                         margin: '0px auto 30px auto',
                         maxWidth: 1024,
-                        paddingTop: 16,
+                        paddingTop: 56,
                         textAlign: 'center'
                     } }
                 >
-                    { 'Hearthstone legend ladder ranks' }
+                    <img
+                        alt = "Hearthstone legend ladder ranks"
+                        src = "img/logo.png"
+                        style = { {
+                            maxWidth: '100%'
+                        } }
+                    />
                 </h1>
                 <Filter
                     onPlayerChange = { this.handlePlayerChange }

@@ -222,16 +222,19 @@ var MainWrapper = function (_React$Component) {
                     'h1',
                     {
                         style: {
-                            fontFamily: 'Roboto, serif',
-                            fontSize: 24,
-                            fontWeight: 400,
                             margin: '0px auto 30px auto',
                             maxWidth: 1024,
-                            paddingTop: 16,
+                            paddingTop: 56,
                             textAlign: 'center'
                         }
                     },
-                    'Hearthstone legend ladder ranks'
+                    _react2.default.createElement('img', {
+                        alt: 'Hearthstone legend ladder ranks',
+                        src: 'img/logo.png',
+                        style: {
+                            maxWidth: '100%'
+                        }
+                    })
                 ),
                 _react2.default.createElement(_Filter2.default, {
                     onPlayerChange: this.handlePlayerChange
