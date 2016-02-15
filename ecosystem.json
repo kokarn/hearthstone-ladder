@@ -1,18 +1,21 @@
 {
-    "apps" : [{
-        "name" : "webserver",
-        "script" : "server.js",
-        "watch" : [ "server.js" ],
-        "exec_mode" : "cluster",
-        "instances" : 1,
-        "merge_logs" : true,
-        "post_update": [ "npm install --production" ]
-    },{
-        "name" : "detector",
-        "script" : "detect.js",
-        "instances" : 1,
-        "exec_mode" : "cluster",
-        "cron_restart": "0-59/5 * * * *",
-        "merge_logs" : true
-    }]
+    "apps" : [
+        {
+            "name" : "webserver",
+            "script" : "server.js",
+            "watch" : [ "server.js" ],
+            "exec_mode" : "cluster",
+            "instances" : 1,
+            "merge_logs" : true,
+            "post_update": [ "npm install --production" ]
+        },
+        {
+            "name" : "detector",
+            "script" : "detect.js",
+            "instances" : 1,
+            "exec_mode" : "cluster",
+            "cron_restart": "0-59/5 * * * *",
+            "merge_logs" : true
+        }
+    ]
 }
