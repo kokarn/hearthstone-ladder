@@ -5,6 +5,7 @@ import TableRow from 'material-ui/lib/table/table-row';
 import TableRowColumn from 'material-ui/lib/table/table-row-column';
 import IconButton from 'material-ui/lib/icon-button';
 import FontIcon from 'material-ui/lib/font-icon';
+import Colors from 'material-ui/lib/styles/colors';
 
 class RankTableRow extends React.Component {
     constructor( props, context ){
@@ -81,6 +82,20 @@ class RankTableRow extends React.Component {
             position: 'relative'
         };
 
+        let liveIcon = (
+            <FontIcon
+                className = "material-icons"
+                style = { {
+                    color: Colors.green500,
+                    fontSize: '14px',
+                    left: '7px',
+                    top: '3px'
+                } }
+            >
+                { 'play_circle_outline' }
+            </FontIcon>
+        );
+
         if( this.props.componentWidth <= 748 ){
             statusNode = false;
 
@@ -142,6 +157,10 @@ class RankTableRow extends React.Component {
             );
         }
 
+        if( this.props.live < 1 ){
+            liveIcon = false;
+        }
+
         return (
             <TableRow
                 hoverable
@@ -157,8 +176,12 @@ class RankTableRow extends React.Component {
                 >
                     <a
                         href = { channelLink }
+                        style = { {
+                            color: Colors.blueGrey500
+                        } }
                     >
                         { channelName }
+                        { liveIcon }
                     </a>
                 </TableRowColumn>
                 <TableRowColumn
@@ -196,6 +219,7 @@ RankTableRow.propTypes = {
     componentWidth: React.PropTypes.number.isRequired,
     customStriped: React.PropTypes.bool.isRequired,
     id: React.PropTypes.number.isRequired,
+    live: React.PropTypes.number.isRequired,
     matchCount: React.PropTypes.number.isRequired,
     name: React.PropTypes.string.isRequired,
     onToggleGraphClick: React.PropTypes.func.isRequired,

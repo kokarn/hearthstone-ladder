@@ -190,6 +190,8 @@ var MainWrapper = function (_React$Component) {
         _this.handlePlayerChange = _this.handlePlayerChange.bind(_this);
 
         _this.wrapperStyle = {
+            backgroundImage: 'url( img/bgheader.png )',
+            backgroundRepeat: 'repeat-x',
             margin: '-10px auto 0 auto',
             maxWidth: '1024px',
             paddingBottom: '30px',
@@ -218,6 +220,16 @@ var MainWrapper = function (_React$Component) {
                     style: this.wrapperStyle,
                     zDepth: 2
                 },
+                _react2.default.createElement('img', {
+                    alt: '',
+                    src: 'img/diamonds.png',
+                    style: {
+                        left: '50%',
+                        maxWidth: '100%',
+                        position: 'absolute',
+                        transform: 'translate( -50%, 0 )'
+                    }
+                }),
                 _react2.default.createElement(
                     'h1',
                     {
@@ -820,6 +832,7 @@ var RankTable = function (_React$Component) {
                     customStriped: legendRank.striped,
                     id: legendRank.id,
                     key: legendRank.channel + '-' + legendRank.timestamp,
+                    live: legendRank.live,
                     matchCount: legendRank.total_matches,
                     name: legendRank.name || '',
                     onToggleGraphClick: _this4.handleToggleGraphClick,
@@ -904,6 +917,9 @@ var RankTable = function (_React$Component) {
                 _table2.default,
                 {
                     selectable: false,
+                    style: {
+                        backgroundColor: 'transparent'
+                    },
                     wrapperStyle: {
                         margin: '0 auto',
                         maxWidth: '1024px'
@@ -1002,6 +1018,10 @@ var _fontIcon = require('material-ui/lib/font-icon');
 
 var _fontIcon2 = _interopRequireDefault(_fontIcon);
 
+var _colors = require('material-ui/lib/styles/colors');
+
+var _colors2 = _interopRequireDefault(_colors);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -1095,6 +1115,20 @@ var RankTableRow = function (_React$Component) {
                 position: 'relative'
             };
 
+            var liveIcon = _react2.default.createElement(
+                _fontIcon2.default,
+                {
+                    className: 'material-icons',
+                    style: {
+                        color: _colors2.default.green500,
+                        fontSize: '14px',
+                        left: '7px',
+                        top: '3px'
+                    }
+                },
+                'play_circle_outline'
+            );
+
             if (this.props.componentWidth <= 748) {
                 statusNode = false;
 
@@ -1160,6 +1194,10 @@ var RankTableRow = function (_React$Component) {
                 );
             }
 
+            if (this.props.live < 1) {
+                liveIcon = false;
+            }
+
             return _react2.default.createElement(
                 _tableRow2.default,
                 {
@@ -1181,9 +1219,13 @@ var RankTableRow = function (_React$Component) {
                     _react2.default.createElement(
                         'a',
                         {
-                            href: channelLink
+                            href: channelLink,
+                            style: {
+                                color: _colors2.default.blueGrey500
+                            }
                         },
-                        channelName
+                        channelName,
+                        liveIcon
                     )
                 ),
                 _react2.default.createElement(
@@ -1227,6 +1269,7 @@ RankTableRow.propTypes = {
     componentWidth: _react2.default.PropTypes.number.isRequired,
     customStriped: _react2.default.PropTypes.bool.isRequired,
     id: _react2.default.PropTypes.number.isRequired,
+    live: _react2.default.PropTypes.number.isRequired,
     matchCount: _react2.default.PropTypes.number.isRequired,
     name: _react2.default.PropTypes.string.isRequired,
     onToggleGraphClick: _react2.default.PropTypes.func.isRequired,
@@ -1236,7 +1279,7 @@ RankTableRow.propTypes = {
 };
 
 exports.default = RankTableRow;
-},{"material-ui/lib/font-icon":102,"material-ui/lib/icon-button":103,"material-ui/lib/table/table-row":131,"material-ui/lib/table/table-row-column":130,"react":352,"react-time":217}],8:[function(require,module,exports){
+},{"material-ui/lib/font-icon":102,"material-ui/lib/icon-button":103,"material-ui/lib/styles/colors":115,"material-ui/lib/table/table-row":131,"material-ui/lib/table/table-row-column":130,"react":352,"react-time":217}],8:[function(require,module,exports){
 /*!
   * Bowser - a browser detector
   * https://github.com/ded/bowser

@@ -128,6 +128,7 @@ class RankTable extends React.Component {
                     customStriped = { legendRank.striped }
                     id = { legendRank.id }
                     key = { legendRank.channel + '-' + legendRank.timestamp }
+                    live = { legendRank.live }
                     matchCount = { legendRank.total_matches }
                     name = { legendRank.name || '' }
                     onToggleGraphClick = { this.handleToggleGraphClick }
@@ -214,6 +215,9 @@ class RankTable extends React.Component {
         return (
             <Table
                 selectable = { false }
+                style = { {
+                    backgroundColor: 'transparent'
+                } }
                 wrapperStyle = { {
                     margin: '0 auto',
                     maxWidth: '1024px'

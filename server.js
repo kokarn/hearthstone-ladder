@@ -205,6 +205,7 @@ app.get( '/data', function( request, response ){
         timestamp,
         status,
         name,
+        live,
         t3.total_matches
         FROM
             matches

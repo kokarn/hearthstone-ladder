@@ -15,6 +15,8 @@ class MainWrapper extends React.Component {
         this.handlePlayerChange = this.handlePlayerChange.bind( this );
 
         this.wrapperStyle = {
+            backgroundImage: 'url( img/bgheader.png )',
+            backgroundRepeat: 'repeat-x',
             margin: '-10px auto 0 auto',
             maxWidth: '1024px',
             paddingBottom: '30px',
@@ -38,6 +40,16 @@ class MainWrapper extends React.Component {
                 style = { this.wrapperStyle }
                 zDepth = { 2 }
             >
+                <img
+                    alt = ""
+                    src = "img/diamonds.png"
+                    style = { {
+                        left: '50%',
+                        maxWidth: '100%',
+                        position: 'absolute',
+                        transform: 'translate( -50%, 0 )'
+                    } }
+                />
                 <h1
                     style = { {
                         margin: '0px auto 30px auto',
