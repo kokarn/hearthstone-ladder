@@ -18,13 +18,11 @@ var connectionPool = mysql.createPool({
 });
 
 function updateLiveStatus(){
-    console.log( 'Got', liveChannels.length, 'live channels' );
+    console.log( 'Got a total of', liveChannels.length, 'live Hearthstone channels' );
     connectionPool.getConnection( function( error, connection ){
         if( error ){
             throw error;
         }
-
-        console.log( 'UPDATE players SET live = 1 WHERE channel IN ( ' + mysql.escape( liveChannels ) + ' )' );
 
         connection.query(
             'UPDATE players SET live = 1 WHERE channel IN ( ' + mysql.escape( liveChannels ) + ' )',
@@ -33,7 +31,7 @@ function updateLiveStatus(){
                     throw error;
                 }
 
-                console.log( 'Channels live:', rows.affectedRows );
+                console.log( 'Channels set as live:', rows.affectedRows );
 
                 connection.release();
             }
