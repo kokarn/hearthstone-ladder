@@ -244,7 +244,8 @@ var MainWrapper = function (_React$Component) {
                         alt: 'Hearthstone legend ladder ranks',
                         src: 'img/logo.png',
                         style: {
-                            maxWidth: '100%'
+                            maxWidth: '100%',
+                            position: 'relative'
                         }
                     })
                 ),
