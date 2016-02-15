@@ -20,7 +20,7 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 CREATE DATABASE hearthstone_legends;
-GRANT CREATE, DROP, DELETE, INSERT, SELECT, UPDATE, INDEX, ALTER ON hearthstone_legends.* to 'hearthstone'@'localhost' identified by 'test';
+GRANT CREATE, DROP, DELETE, INSERT, SELECT, UPDATE, INDEX, ALTER ON hearthstone_legends.* to 'hearthstone'@'%' identified by 'test';
 FLUSH PRIVILEGES;
 
 USE hearthstone_legends;
