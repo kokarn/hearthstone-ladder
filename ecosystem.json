@@ -16,6 +16,14 @@
             "exec_mode" : "cluster",
             "cron_restart": "0-59/5 * * * *",
             "merge_logs" : true
+        },
+        {
+            "name" : "Live checker",
+            "script" : "live.js",
+            "instances" : 1,
+            "exec_mode" : "cluster",
+            "cron_restart": "* * * * *",
+            "merge_logs" : true
         }
     ]
 }

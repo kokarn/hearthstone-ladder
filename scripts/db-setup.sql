@@ -53,6 +53,7 @@ CREATE TABLE `players` (
   `x` int(11) DEFAULT NULL,
   `y` int(11) DEFAULT NULL,
   `should_index` tinyint(1) NOT NULL DEFAULT '1',
+  `live` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`channel`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
