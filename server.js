@@ -376,7 +376,7 @@ app.get( '/channel/*', restrict, function( request, response ){
                     var shouldIndexQueryParam = '1';
                 }
                 var htmlResponse = `<ul>
-                <li>Channel: ${ rows[ 0 ].channel }</li>
+                <li>Channel: <a href="http://twitch.tv/${ rows[ 0 ].channel }">${ rows[ 0 ].channel }</a></li>
                 <li>Name: <form method="get"><input type="text" name="name" value="${ rows[ 0 ].name }"><input type="submit" value="Update"></form></li>
                 <li>Showing: <a href="?should_index=${ shouldIndexQueryParam }">${ rows[ 0 ].should_index }</a></li>
                 </ul>`;
