@@ -220,7 +220,7 @@ app.get( '/data', function( request, response ){
             FROM
                 matches
             WHERE
-                timestamp BETWEEN '${hearthstone.getSeasonStartDate( currentSeason )}' AND '${hearthstone.getSeasonEndDate( currentSeason )}'
+                timestamp > '${ moment().subtract( 1, 'weeks' ).format( 'YYYY-MM-DD 00:00:00' ) }'
             GROUP BY
                 channel
         ) AS t3
