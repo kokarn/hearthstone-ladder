@@ -95,20 +95,55 @@ CharacterFinder.prototype.onImgLoad = function(){
     var numberShapes = [];
     var resultingNumbers = [];
     var validShapes = [];
+    var gemBoundaries;
+    var maxGemSize = 0;
 
     this.context.drawImage( this.img, 0, this.img.height - this.ypos, this.width, this.height, 0, 0, this.width, this.height );
+
+    var gemAreas = this.traceAll( {
+        r: 154,
+        g: 81,
+        b: 28,
+        a: 1
+    }, 35 ) ;
+
+    for( var gemIndex = 0; gemIndex < gemAreas.length; gemIndex = gemIndex + 1 ){
+        if( gemAreas[ gemIndex ].length > maxGemSize ){
+            maxGemSize = gemAreas[ gemIndex ].length;
+            gemBoundaries = findBoundaries( gemAreas[ gemIndex ] );
+        }
+    }
+
+    if( gemIndex.length === 0 || typeof gemBoundaries === 'undefined' ){
+        this.finished( false );
+        return false;
+    }
+
+    // Increase the areas a bit so we are actually outside
+    gemBoundaries.xmin = Math.max( gemBoundaries.xmin - 10, 0 );
+    gemBoundaries.xmax = Math.min( gemBoundaries.xmax + 10, this.width );
+
+    //console.log( gemBoundaries.xmax - gemBoundaries.xmin );
+
+    if( gemBoundaries.xmax - gemBoundaries.xmin < 70 ){
+        gemBoundaries.xmin = gemBoundaries.xmin - 30;
+    }
+
+    // Set y cords to min and max of image
+    gemBoundaries.ymin = 0;
+    gemBoundaries.ymax = this.height;
+
+    this.drawRect( gemBoundaries.xmin, gemBoundaries.ymin, gemBoundaries.xmax, gemBoundaries.ymax, '#ff9100' );
 
     var tracedShapes = this.traceAll( this.color );
 
     for(var i = 0, l = tracedShapes.length; i < l; i++ ){
-        if( tracedShapes[ i ].length < 90 || tracedShapes[ i ].length > 460 ){
-            this.drawPixels( this.context, tracedShapes[ i ], '#000' );
-        } else {
+        if( tracedShapes[ i ].length > 90 && tracedShapes[ i ].length < 460 ){
             numberShapes.push( tracedShapes[ i ] );
         }
     }
 
-    this.context.drawImage( this.img, 0, this.img.height - this.ypos, this.width, this.height, 0, 0, this.width, this.height );
+    //this.context.drawImage( this.img, 0, this.img.height - this.ypos, this.width, this.height, 0, 0, this.width, this.height );
 
     for( var i = 0, l = numberShapes.length; i < l; i++ ){
 
@@ -122,7 +157,11 @@ CharacterFinder.prototype.onImgLoad = function(){
             ( boundaries.ymax - boundaries.ymin ) / ( boundaries.xmax - boundaries.xmin ) < 1.9 &&
             ( boundaries.ymax - boundaries.ymin ) > 15 &&
             boundaries.xmax < this.width - 1 &&
-            boundaries.ymax < this.height - 1
+            boundaries.ymax < this.height - 1 &&
+            boundaries.xmin >= gemBoundaries.xmin &&
+            boundaries.xmax <= gemBoundaries.xmax &&
+            boundaries.ymin >= gemBoundaries.ymin &&
+            boundaries.ymax <= gemBoundaries.ymax
         ){
             // Make sure the current bounding box is close enough to the last one
             if( validShapes.length > 0 ){
@@ -163,7 +202,8 @@ CharacterFinder.prototype.onImgLoad = function(){
                 }
 
                 if(
-                    ( bestAnswer == null || bestAnswerValue > sum ) && sum < 6.2
+                    ( bestAnswer == null || bestAnswerValue > sum )
+                    && sum < 6.2
                     || ( bestAnswer === 5 && sum - bestAnswerValue < 1.2 )
                 ){
                     bestAnswer = j;
@@ -216,6 +256,10 @@ CharacterFinder.prototype.onImgLoad = function(){
         resultingNumbers = false;
     }
 
+    this.finished( resultingNumbers );
+}
+
+CharacterFinder.prototype.finished = function( resultingNumbers ){
     for( var i = 0, l = this.onCompleteCallbacks.length; i < l; i++){
         if( resultingNumbers ){
             this.onCompleteCallbacks[ i ].bind( this )( this.filePath, parseInt(resultingNumbers.join('')) );
