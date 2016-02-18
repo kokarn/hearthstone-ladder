@@ -204,7 +204,8 @@ CharacterFinder.prototype.onImgLoad = function(){
                 if(
                     ( bestAnswer == null || bestAnswerValue > sum )
                     && sum < 6.2
-                    || ( bestAnswer === 5 && sum - bestAnswerValue < 1.2 )
+                    || ( bestAnswer === 5 && sum - bestAnswerValue < 2.2 )
+                    || ( bestAnswer === 3 && sum - bestAnswerValue < 0.5 )
                 ){
                     bestAnswer = j;
                     bestAnswerValue = sum;
