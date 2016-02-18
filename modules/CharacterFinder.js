@@ -12,11 +12,11 @@ var CharacterFinder = function( filePath ){
     this.filePath = filePath;
 
     // Width & height of match area
-    this.width = 270;
-    this.height = 105;
+    this.width = 290;
+    this.height = 115;
 
     // What ypos to start the image. 0 is bottom
-    this.ypos = 205;
+    this.ypos = 210;
 
     // What color to try to find
     this.setColor({
