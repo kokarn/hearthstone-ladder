@@ -305,6 +305,40 @@ app.get( '/channel/*', restrict, function( request, response ){
         database : config.database.name
     });
 
+    /* invalidate */
+    if( request.query.action === 'invalidate' ){
+        let removeId = Number( request.query.id );
+
+        if( !Number.isInteger( removeId ) || removeId < 1 ){
+            response.end();
+            return false;
+        }
+
+        pool.getConnection( function( error, connection ){
+            if( error ){
+                throw error;
+            }
+
+            connection.query( `
+                DELETE
+                FROM
+                    matches
+                WHERE
+                    id = ?
+                LIMIT
+                    1`,
+                removeId,
+                function( error, rows, fields ){
+                    if( error ) {
+                        throw error;
+                    }
+
+                    connection.release();
+                }
+            );
+        });
+    }
+
     if( request.query.name ){
         pool.getConnection( function( error, connection ){
             if( error ){
@@ -375,6 +409,7 @@ app.get( '/channel/*', restrict, function( request, response ){
                 } else {
                     var shouldIndexQueryParam = '1';
                 }
+                
                 var htmlResponse = `<ul>
                 <li>Channel: <a href="http://twitch.tv/${ rows[ 0 ].channel }">${ rows[ 0 ].channel }</a></li>
                 <li>Name: <form method="get"><input type="text" name="name" value="${ rows[ 0 ].name }"><input type="submit" value="Update"></form></li>
@@ -385,7 +420,7 @@ app.get( '/channel/*', restrict, function( request, response ){
                 }
 
                 for( let i = 0; i < rows.length; i = i + 1 ){
-                    htmlResponse = htmlResponse + '<a href="/invalidate?id=' + rows[ i ].id + '"><img src="' + getMatchImagePath( rows[ i ].channel, rows[ i ].timestamp ) + '"></a>';
+                    htmlResponse = htmlResponse + '<a href="/channel/' + rows[ i ].channel + '?action=invalidate&id=' + rows[ i ].id + '"><img src="' + getMatchImagePath( rows[ i ].channel, rows[ i ].timestamp ) + '"></a>';
                 }
 
                 response.send( htmlResponse );
@@ -429,50 +464,13 @@ app.get( '/cleanup', restrict, function( request, response ){
             }
 
             for( let i = 0; i < rows.length - 1; i = i + 1 ){
-                htmlResponse = htmlResponse + '<a href="/invalidate?id=' + rows[ i ].id + '&channel=' + rows[ i ].channel + '"><img src="' + getMatchImagePath( rows[ i ].channel, rows[ i ].timestamp ) + '"></a>';
+                htmlResponse = htmlResponse + '<a href="/channel/' + rows[ i ].channel + '?action=invalidate&id=' + rows[ i ].id + '"><img src="' + getMatchImagePath( rows[ i ].channel, rows[ i ].timestamp ) + '"></a>';
             }
 
             response.send( htmlResponse );
         }
     );
 
-    connection.end();
-});
-
-app.get( '/invalidate', restrict, function( request, response ){
-    let removeId = Number( request.query.id );
-
-    if( !Number.isInteger( removeId ) || removeId < 1 ){
-        response.end();
-        return false;
-    }
-
-    var connection = mysql.createConnection({
-        host : config.database.host,
-        user : config.database.user,
-        port: config.database.port,
-        password : config.database.password,
-        database : config.database.name
-    });
-
-    connection.connect();
-
-    connection.query( `
-        DELETE
-        FROM
-            matches
-        WHERE
-            id = ?
-        LIMIT
-            1`,
-        removeId,
-        function( error, rows, fields ){
-            if( error ) {
-                throw error;
-            }
-        }
-    );
-    response.end();
     connection.end();
 });
 
