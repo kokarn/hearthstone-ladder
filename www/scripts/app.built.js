@@ -365,11 +365,31 @@ var RankChart = function (_React$Component) {
                     width: nextProps.componentWidth - 20
                 });
             }
+
+            if (nextProps.show && !this.props.show) {
+                this.loadChannelData();
+                this.setUpdateTimeout();
+            }
+
+            if (!nextProps.show) {
+                clearTimeout(this.updateDataTimeout);
+            }
+        }
+    }, {
+        key: 'setUpdateTimeout',
+        value: function setUpdateTimeout() {
+            var _this2 = this;
+
+            this.updateDataTimeout = setTimeout(function () {
+                _this2.loadChannelData();
+            }, 60000);
         }
     }, {
         key: 'loadChannelData',
         value: function loadChannelData() {
-            var _this2 = this;
+            var _this3 = this;
+
+            clearTimeout(this.updateDataTimeout);
 
             (0, _xhr2.default)({
                 uri: 'data/' + this.props.channel,
@@ -399,10 +419,12 @@ var RankChart = function (_React$Component) {
                     body[index].index = index;
                 });
 
-                _this2.setState({
+                _this3.setState({
                     chartData: body,
                     yDomain: [yMax, 0]
                 });
+
+                _this3.setUpdateTimeout();
             });
         }
     }, {
@@ -428,7 +450,6 @@ var RankChart = function (_React$Component) {
             }
 
             if (this.state.chartData.length <= 0) {
-                this.loadChannelData();
                 return _react2.default.createElement(
                     _tableRow2.default,
                     null,

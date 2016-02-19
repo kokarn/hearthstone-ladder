@@ -58,9 +58,25 @@ class RankChart extends React.Component {
             });
         }
 
+        if( nextProps.show && !this.props.show ){
+            this.loadChannelData();
+            this.setUpdateTimeout();
+        }
+
+        if( !nextProps.show ){
+            clearTimeout( this.updateDataTimeout );
+        }
+    }
+
+    setUpdateTimeout(){
+        this.updateDataTimeout = setTimeout(() => {
+            this.loadChannelData();
+        }, 60000 );
     }
 
     loadChannelData(){
+        clearTimeout( this.updateDataTimeout );
+
         xhr({
             uri: 'data/' + this.props.channel,
             headers: {
@@ -93,6 +109,8 @@ class RankChart extends React.Component {
                 chartData: body,
                 yDomain: [ yMax, 0 ]
             });
+
+            this.setUpdateTimeout();
         });
     }
 
@@ -118,7 +136,6 @@ class RankChart extends React.Component {
         }
 
         if( this.state.chartData.length <= 0 ){
-            this.loadChannelData();
             return (
                 <TableRow>
                     <TableRowColumn
