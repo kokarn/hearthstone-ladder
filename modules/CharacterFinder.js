@@ -23,9 +23,9 @@ var CharacterFinder = function( filePath ){
 
     // What color to try to find
     this.setColor({
-        r: 219,
-        g: 204,
-        b: 122,
+        r: 202,
+        g: 220,
+        b: 138,
         a: 1
     });
 
