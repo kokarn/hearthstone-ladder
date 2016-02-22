@@ -117,7 +117,12 @@ CharacterFinder.prototype.onImgLoad = function(){
         }
     }
 
-    if( gemIndex.length === 0 || typeof gemBoundaries === 'undefined' ){
+    if(
+        gemIndex.length === 0
+        || typeof gemBoundaries === 'undefined'
+        || gemBoundaries.xmax - gemBoundaries.xmin < 50
+        || gemBoundaries.xmax - gemBoundaries.xmin > this.width * 0.9
+    ){
         this.finished( false );
         return false;
     }
