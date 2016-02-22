@@ -342,19 +342,19 @@ CharacterFinder.prototype.traceAreaStepColor = function( x, y, color, index, can
             y: y
         } );
 
-        if( index.indexOf( ( x + 1 ) + ',' + ( y ) ) === -1 ){
+        if( x + 1 < this.width && index.indexOf( ( x + 1 ) + ',' + ( y ) ) === -1 ){
             result = result.concat( this.traceAreaStepColor( x + 1, y, color, index, canvasData, maxDiff ) );
         }
 
-        if( index.indexOf( ( x ) + ',' + ( y + 1 ) ) === -1 ){
+        if( y + 1 < this.height && index.indexOf( ( x ) + ',' + ( y + 1 ) ) === -1 ){
             result = result.concat( this.traceAreaStepColor( x, y + 1, color, index, canvasData, maxDiff ) );
         }
 
-        if( index.indexOf( ( x - 1 ) + ',' + ( y ) ) === -1 ){
+        if( x - 1 > 0 && index.indexOf( ( x - 1 ) + ',' + ( y ) ) === -1 ){
             result = result.concat( this.traceAreaStepColor( x - 1, y, color, index, canvasData, maxDiff ) );
         }
 
-        if( index.indexOf( ( x ) + ',' + ( y - 1 ) ) === -1 ){
+        if( y - 1 > 0 && index.indexOf( ( x ) + ',' + ( y - 1 ) ) === -1 ){
             result = result.concat( this.traceAreaStepColor( x, y - 1, color, index, canvasData, maxDiff ) );
         }
     }
