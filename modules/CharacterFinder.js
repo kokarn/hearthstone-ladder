@@ -204,18 +204,11 @@ CharacterFinder.prototype.onImgLoad = function(){
                 }
 
                 if(
-                    ( bestAnswer == null || bestAnswerValue > sum )
+                    ( bestAnswer == null || bestAnswerValue > sum || sum === 0  )
                     && sum < 6.2
-                    || ( bestAnswer === 5 && sum - bestAnswerValue < 2.2 )
-                    || ( bestAnswer === 3 && sum - bestAnswerValue < 0.5 )
                 ){
                     bestAnswer = j;
                     bestAnswerValue = sum;
-                }
-
-                // We can't find a better match
-                if( bestAnswerValue === 0 && bestAnswer !== 5 ){
-                    break;
                 }
             }
 
@@ -582,11 +575,11 @@ function getNumCurve( n, w, h ){
 
         //6
         [
-            [ 8, 0 ],
-            [ 2, 1 ],
+            [ 8, 0.5 ],
+            [ 3, 1.1 ],
             [ 2, 8 ],
             [ 5, 10 ],
-            [ 8.9, 8 ],
+            [ 9, 8.5 ],
             [ 2, 4.5 ]
         ],
 
@@ -603,7 +596,7 @@ function getNumCurve( n, w, h ){
 
         //8
         [
-            [ 5, -0.5 ],
+            [ 5, -0.1 ],
             [ 0.5, 2.4 ],
             [ 5, 4.5 ],
             [ 9.5, 7.5 ],
@@ -611,7 +604,7 @@ function getNumCurve( n, w, h ){
             [ 0, 7.3 ],
             [ 5, 4.5 ],
             [ 9.4, 2.4 ],
-            [ 5, -0.5 ]
+            [ 5, -0.1 ]
         ],
 
         //9
