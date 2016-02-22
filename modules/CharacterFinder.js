@@ -339,7 +339,7 @@ CharacterFinder.prototype.traceAreaStepColor = function( x, y, color, index, can
     if(
         colorDiff( color, this.getPixelColor( x, y, canvasData ) ) < maxDiff &&
         index.indexOf( currentPosition ) === -1 &&
-        index.length < 2000
+        index.length < 2500
     ){
         index.push( currentPosition );
 
