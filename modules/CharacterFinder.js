@@ -21,6 +21,9 @@ var CharacterFinder = function( filePath ){
     // Set the max color diff for matching the numbers
     this.numberColorDiff = 53;
 
+    // Set the number of pixels to pad the gem area on each side
+    this.gemPadding = 15;
+
     // What color to try to find
     this.setColor({
         r: 202,
@@ -128,8 +131,8 @@ CharacterFinder.prototype.onImgLoad = function(){
     }
 
     // Increase the areas a bit so we are actually outside
-    gemBoundaries.xmin = Math.max( gemBoundaries.xmin - 10, 0 );
-    gemBoundaries.xmax = Math.min( gemBoundaries.xmax + 10, this.width );
+    gemBoundaries.xmin = Math.max( gemBoundaries.xmin - this.gemPadding, 0 );
+    gemBoundaries.xmax = Math.min( gemBoundaries.xmax + this.gemPadding, this.width );
 
     // Set y cords to min and max of image
     gemBoundaries.ymin = 0;
