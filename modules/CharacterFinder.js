@@ -302,7 +302,7 @@ CharacterFinder.prototype.contrast = function(){
 
 CharacterFinder.prototype.drawPixel = function( x, y, color ){
     this.context.fillStyle = color || '#FFF';
-    this.context.fillRect(x,y,1,1);
+    this.context.fillRect( x, y, 1, 1 );
 }
 
 CharacterFinder.prototype.traceAll = function( byColor ){
@@ -324,53 +324,41 @@ CharacterFinder.prototype.traceAll = function( byColor ){
     return tracedShapes;
 }
 
-CharacterFinder.prototype.traceArea = function ( startx, starty, value, index, byColor, canvasData ){
-    var traceIndex = index || [];
-    return this.traceAreaStepColor( startx, starty, value, traceIndex, canvasData );
+CharacterFinder.prototype.traceArea = function ( x, y, value, index, byColor, canvasData ){
+    return this.traceAreaStepColor( x, y, value, index, canvasData );
 }
 
-CharacterFinder.prototype.traceAreaStepColor = function( startx, starty, color, index, canvasData ){
+CharacterFinder.prototype.traceAreaStepColor = function( x, y, color, index, canvasData ){
 
     var result = [];
+    var currentPosition = x + ',' + y;
 
     if(
-        colorDiff( color, this.getPixelColor( startx, starty, canvasData ) ) < 50 &&
-        index.indexOf( startx + ',' + starty ) === -1 &&
+        colorDiff( color, this.getPixelColor( x, y, canvasData ) ) < 50 &&
+        index.indexOf( currentPosition ) === -1 &&
         index.length < 2000
     ){
-        index.push( startx + ',' + starty );
+        index.push( currentPosition );
 
         result.push( {
-            x: startx,
-            y: starty
+            x: x,
+            y: y
         } );
 
-        if( index.indexOf( ( startx + 1 ) + ',' + ( starty ) ) === -1 ){
-            result = result.concat( this.traceAreaStepColor( startx + 1, starty, color, index, canvasData ) );
+        if( index.indexOf( ( x + 1 ) + ',' + ( y ) ) === -1 ){
+            result = result.concat( this.traceAreaStepColor( x + 1, y, color, index, canvasData ) );
         }
 
-        if( result.length > 460 ){
-            return result;
+        if( index.indexOf( ( x ) + ',' + ( y + 1 ) ) === -1 ){
+            result = result.concat( this.traceAreaStepColor( x, y + 1, color, index, canvasData ) );
         }
 
-        if( index.indexOf( ( startx ) + ',' + ( starty + 1 ) ) === -1 ){
-            result = result.concat( this.traceAreaStepColor( startx, starty + 1, color, index, canvasData ) );
+        if( index.indexOf( ( x - 1 ) + ',' + ( y ) ) === -1 ){
+            result = result.concat( this.traceAreaStepColor( x - 1, y, color, index, canvasData ) );
         }
 
-        if( result.length > 460 ){
-            return result;
-        }
-
-        if( index.indexOf( ( startx - 1 ) + ',' + ( starty ) ) === -1 ){
-            result = result.concat( this.traceAreaStepColor( startx - 1, starty, color, index, canvasData ) );
-        }
-
-        if( result.length > 460 ){
-            return result;
-        }
-
-        if( index.indexOf( ( startx ) + ',' + ( starty - 1 ) ) === -1 ){
-            result = result.concat( this.traceAreaStepColor( startx, starty - 1, color, index, canvasData ) );
+        if( index.indexOf( ( x ) + ',' + ( y - 1 ) ) === -1 ){
+            result = result.concat( this.traceAreaStepColor( x, y - 1, color, index, canvasData ) );
         }
     }
 
