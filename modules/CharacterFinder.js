@@ -126,12 +126,6 @@ CharacterFinder.prototype.onImgLoad = function(){
     gemBoundaries.xmin = Math.max( gemBoundaries.xmin - 10, 0 );
     gemBoundaries.xmax = Math.min( gemBoundaries.xmax + 10, this.width );
 
-    //console.log( gemBoundaries.xmax - gemBoundaries.xmin );
-
-    if( gemBoundaries.xmax - gemBoundaries.xmin < 70 ){
-        gemBoundaries.xmin = gemBoundaries.xmin - 30;
-    }
-
     // Set y cords to min and max of image
     gemBoundaries.ymin = 0;
     gemBoundaries.ymax = this.height;
