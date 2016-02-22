@@ -18,6 +18,9 @@ var CharacterFinder = function( filePath ){
     // What ypos to start the image. 0 is bottom
     this.ypos = 210;
 
+    // Set the max color diff for matching the numbers
+    this.numberColorDiff = 53;
+
     // What color to try to find
     this.setColor({
         r: 219,
@@ -105,7 +108,7 @@ CharacterFinder.prototype.onImgLoad = function(){
         g: 81,
         b: 28,
         a: 1
-    }, 35 ) ;
+    }, 35 );
 
     for( var gemIndex = 0; gemIndex < gemAreas.length; gemIndex = gemIndex + 1 ){
         if( gemAreas[ gemIndex ].length > maxGemSize ){
@@ -135,7 +138,7 @@ CharacterFinder.prototype.onImgLoad = function(){
 
     this.drawRect( gemBoundaries.xmin, gemBoundaries.ymin, gemBoundaries.xmax, gemBoundaries.ymax, '#ff9100' );
 
-    var tracedShapes = this.traceAll( this.color );
+    var tracedShapes = this.traceAll( this.color, this.numberColorDiff );
 
     for(var i = 0, l = tracedShapes.length; i < l; i++ ){
         if( tracedShapes[ i ].length > 90 && tracedShapes[ i ].length < 460 ){
@@ -305,7 +308,7 @@ CharacterFinder.prototype.drawPixel = function( x, y, color ){
     this.context.fillRect( x, y, 1, 1 );
 }
 
-CharacterFinder.prototype.traceAll = function( byColor ){
+CharacterFinder.prototype.traceAll = function( byColor, maxDiff ){
     var tracedShapes = [];
     var traceIndex = [];
     var value = byColor;
@@ -313,7 +316,7 @@ CharacterFinder.prototype.traceAll = function( byColor ){
     var canvasData = this.context.getImageData( 0, 0, this.width, this.height ).data;
 
     this.onPixels( ( function( x, y ){
-        var tracedShape = this.traceArea( x, y, value, traceIndex, byColor, canvasData );
+        var tracedShape = this.traceArea( x, y, value, traceIndex, byColor, canvasData, maxDiff );
 
         if( tracedShape.length ){
             tracedShapes.push( tracedShape );
@@ -324,17 +327,17 @@ CharacterFinder.prototype.traceAll = function( byColor ){
     return tracedShapes;
 }
 
-CharacterFinder.prototype.traceArea = function ( x, y, value, index, byColor, canvasData ){
-    return this.traceAreaStepColor( x, y, value, index, canvasData );
+CharacterFinder.prototype.traceArea = function ( x, y, value, index, byColor, canvasData, maxDiff ){
+    return this.traceAreaStepColor( x, y, value, index, canvasData, maxDiff );
 }
 
-CharacterFinder.prototype.traceAreaStepColor = function( x, y, color, index, canvasData ){
+CharacterFinder.prototype.traceAreaStepColor = function( x, y, color, index, canvasData, maxDiff ){
 
     var result = [];
     var currentPosition = x + ',' + y;
 
     if(
-        colorDiff( color, this.getPixelColor( x, y, canvasData ) ) < 50 &&
+        colorDiff( color, this.getPixelColor( x, y, canvasData ) ) < maxDiff &&
         index.indexOf( currentPosition ) === -1 &&
         index.length < 2000
     ){
@@ -346,19 +349,19 @@ CharacterFinder.prototype.traceAreaStepColor = function( x, y, color, index, can
         } );
 
         if( index.indexOf( ( x + 1 ) + ',' + ( y ) ) === -1 ){
-            result = result.concat( this.traceAreaStepColor( x + 1, y, color, index, canvasData ) );
+            result = result.concat( this.traceAreaStepColor( x + 1, y, color, index, canvasData, maxDiff ) );
         }
 
         if( index.indexOf( ( x ) + ',' + ( y + 1 ) ) === -1 ){
-            result = result.concat( this.traceAreaStepColor( x, y + 1, color, index, canvasData ) );
+            result = result.concat( this.traceAreaStepColor( x, y + 1, color, index, canvasData, maxDiff ) );
         }
 
         if( index.indexOf( ( x - 1 ) + ',' + ( y ) ) === -1 ){
-            result = result.concat( this.traceAreaStepColor( x - 1, y, color, index, canvasData ) );
+            result = result.concat( this.traceAreaStepColor( x - 1, y, color, index, canvasData, maxDiff ) );
         }
 
         if( index.indexOf( ( x ) + ',' + ( y - 1 ) ) === -1 ){
-            result = result.concat( this.traceAreaStepColor( x, y - 1, color, index, canvasData ) );
+            result = result.concat( this.traceAreaStepColor( x, y - 1, color, index, canvasData, maxDiff ) );
         }
     }
 
