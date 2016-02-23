@@ -233,7 +233,7 @@ app.post( '/login', function( request, response ){
             request.session.regenerate(function(){
                 request.session.user = user;
                 request.session.success = 'Authenticated as ' + user.name + ' click to <a href="/logout">logout</a>. You may now access <a href="/restricted">/restricted</a>.';
-                response.redirect( '/check' );
+                response.redirect( '/admin' );
             });
         } else {
             request.session.error = 'Authentication failed, please check your username and password. (use "tj" and "foobar")';
@@ -474,6 +474,35 @@ app.get( '/latest', restrict, function( request, response ){
     );
 
     connection.end();
+});
+
+app.get( '/admin', restrict, function( request, response ){
+    var htmlResponse = `
+    <ul>
+        <li>
+            <a href="/check">
+                Check
+            </a>
+        </li>
+        <li>
+            <a href="/latest">
+                Latest
+            </a>
+        </li>
+        <li>
+            <a href="/missing">
+                Missing
+            </a>
+        </li>
+        <li>
+            <a href="/logout">
+                Logout
+            </a>
+        </li>
+    </ul>
+    `;
+
+    response.send( htmlResponse );
 });
 
 app.listen( 3000, function(){
