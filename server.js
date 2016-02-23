@@ -520,16 +520,23 @@ app.get( '/missing', restrict, function( request, response ){
 
     connection.query( `
         SELECT
-            channel,
+            matches.channel,
             name
         FROM
+            matches,
             players
         WHERE
-            channel = name
-        OR
-            name = ''
+            matches.channel = players.channel
+        AND
+            (
+                players.name = ''
+            OR
+                players.name = matches.channel
+            )
+        GROUP BY
+            matches.channel
         ORDER BY
-            channel
+            matches.channel
         `,
         function( error, rows, fields ){
             if( error ) {
