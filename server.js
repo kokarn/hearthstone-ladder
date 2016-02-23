@@ -531,7 +531,7 @@ app.get( '/missing', restrict, function( request, response ){
             (
                 players.name = ''
             OR
-                players.name = matches.channel
+                BINARY players.name = matches.channel
             )
         GROUP BY
             matches.channel
