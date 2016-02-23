@@ -112,39 +112,6 @@ function restrict( request, response, next ){
     }
 }
 
-app.post( '/login', function( request, response ){
-    authenticate( request.body.username, request.body.password, function( error, user ){
-        if( user ) {
-            request.session.regenerate(function(){
-                request.session.user = user;
-                request.session.success = 'Authenticated as ' + user.name + ' click to <a href="/logout">logout</a>. You may now access <a href="/restricted">/restricted</a>.';
-                response.redirect( '/check' );
-            });
-        } else {
-            request.session.error = 'Authentication failed, please check your username and password. (use "tj" and "foobar")';
-            response.redirect( '/login' );
-        }
-    });
-});
-
-app.get( '/login', function( request, response ){
-    let responseHtml = `
-        <form method="post" action="/login">
-            <input type="text" name="username" placeholder="username">
-            <input type="password" name="password">
-            <input type="submit" value="Log in">
-        </form>
-    `;
-
-    response.send( responseHtml );
-});
-
-app.get( '/logout', function( request, response ){
-    request.session.destroy( function(){
-        response.redirect( '/' );
-    });
-});
-
 app.get( '/data/*', function( request, response ){
     var connection = mysql.createConnection({
         host : config.database.host,
@@ -256,6 +223,41 @@ app.get( '/data', function( request, response ){
     });
 
     connection.end();
+});
+
+/* Admin endpoints */
+
+app.post( '/login', function( request, response ){
+    authenticate( request.body.username, request.body.password, function( error, user ){
+        if( user ) {
+            request.session.regenerate(function(){
+                request.session.user = user;
+                request.session.success = 'Authenticated as ' + user.name + ' click to <a href="/logout">logout</a>. You may now access <a href="/restricted">/restricted</a>.';
+                response.redirect( '/check' );
+            });
+        } else {
+            request.session.error = 'Authentication failed, please check your username and password. (use "tj" and "foobar")';
+            response.redirect( '/login' );
+        }
+    });
+});
+
+app.get( '/login', function( request, response ){
+    let responseHtml = `
+        <form method="post" action="/login">
+            <input type="text" name="username" placeholder="username">
+            <input type="password" name="password">
+            <input type="submit" value="Log in">
+        </form>
+    `;
+
+    response.send( responseHtml );
+});
+
+app.get( '/logout', function( request, response ){
+    request.session.destroy( function(){
+        response.redirect( '/' );
+    });
 });
 
 app.get( '/check', restrict, function( request, response ){
@@ -409,7 +411,7 @@ app.get( '/channel/*', restrict, function( request, response ){
                 } else {
                     var shouldIndexQueryParam = '1';
                 }
-                
+
                 var htmlResponse = `<ul>
                 <li>Channel: <a href="http://twitch.tv/${ rows[ 0 ].channel }">${ rows[ 0 ].channel }</a></li>
                 <li>Name: <form method="get"><input type="text" name="name" value="${ rows[ 0 ].name }"><input type="submit" value="Update"></form></li>
