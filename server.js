@@ -432,7 +432,7 @@ app.get( '/channel/*', restrict, function( request, response ){
     });
 });
 
-app.get( '/cleanup', restrict, function( request, response ){
+app.get( '/latest', restrict, function( request, response ){
     var connection = mysql.createConnection({
         host : config.database.host,
         user : config.database.user,
