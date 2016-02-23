@@ -505,6 +505,50 @@ app.get( '/admin', restrict, function( request, response ){
     response.send( htmlResponse );
 });
 
+app.get( '/missing', restrict, function( request, response ){
+    var connection = mysql.createConnection({
+        host : config.database.host,
+        user : config.database.user,
+        port: config.database.port,
+        password : config.database.password,
+        database : config.database.name
+    });
+
+    var htmlResponse = '<ul>';
+
+    connection.connect();
+
+    connection.query( `
+        SELECT
+            channel,
+            name
+        FROM
+            players
+        WHERE
+            channel = name
+        OR
+            name = ''
+        ORDER BY
+            channel
+        `,
+        function( error, rows, fields ){
+            if( error ) {
+                throw error;
+            }
+
+            for( let i = 0; i < rows.length - 1; i = i + 1 ){
+                htmlResponse = htmlResponse + '<li><a href="/channel/' + rows[ i ].channel + '">' + rows[ i ].channel + '</a></li>';
+            }
+
+            htmlResponse = htmlResponse + '</ul>';
+
+            response.send( htmlResponse );
+        }
+    );
+
+    connection.end();
+});
+
 app.listen( 3000, function(){
     console.log( 'Webserver listening on port 3000' );
 });
