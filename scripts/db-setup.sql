@@ -37,7 +37,9 @@ CREATE TABLE `matches` (
   `distance` int(11) NOT NULL,
   `status` mediumtext,
   `verified` tinyint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `channel` (`channel`),
+  KEY `timestamp` (`timestamp`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 

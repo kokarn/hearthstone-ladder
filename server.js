@@ -183,7 +183,7 @@ app.get( '/data', function( request, response ){
         status,
         name,
         live,
-        t3.total_matches
+        t2.total_matches
         FROM
             matches
         LEFT JOIN
@@ -192,6 +192,7 @@ app.get( '/data', function( request, response ){
             matches.channel = players.channel
         INNER JOIN (
             SELECT
+                max( timestamp ) AS max_timestamp,
                 COUNT( * ) as total_matches,
                 channel
             FROM
@@ -200,26 +201,15 @@ app.get( '/data', function( request, response ){
                 timestamp > '${ moment().subtract( 1, 'weeks' ).format( 'YYYY-MM-DD 00:00:00' ) }'
             GROUP BY
                 channel
-        ) AS t3
-        ON
-            matches.channel = t3.channel
-        INNER JOIN (
-            SELECT
-                max( timestamp ) AS max_timestamp,
-                channel
-            FROM
-                matches
-            GROUP BY
-                channel
-        ) t2
+        ) AS t2
         ON
             matches.channel = t2.channel
-        AND
+        WHERE
             matches.timestamp = t2.max_timestamp
         AND
             players.should_index = 1
         AND
-            t3.total_matches > 1
+            t2.total_matches > 1
         AND
             timestamp BETWEEN '${hearthstone.getSeasonStartDate( currentSeason )}' AND '${hearthstone.getSeasonEndDate( currentSeason )}'
         ORDER BY
