@@ -22,6 +22,8 @@ var users = {
 
 var app = express();
 
+var dataCache = false;
+
 app.use( compress() );
 
 app.use( express.static( path.join( __dirname, '/www' ) ) );
@@ -153,6 +155,14 @@ app.get( '/data/*', function( request, response ){
 });
 
 app.get( '/data', function( request, response ){
+
+    // If we have data that's less than a minute old, just send that
+    if( dataCache && Date.now() - dataCache.timestamp < 60000 ){
+        console.log( 'Sending data from cache' );
+        response.send( dataCache.data );
+        return true;
+    }
+
     var connection = mysql.createConnection({
         host : config.database.host,
         user : config.database.user,
@@ -214,15 +224,21 @@ app.get( '/data', function( request, response ){
             timestamp BETWEEN '${hearthstone.getSeasonStartDate( currentSeason )}' AND '${hearthstone.getSeasonEndDate( currentSeason )}'
         ORDER BY
             matches.timestamp
-        DESC`, function( error, rows, fields ){
-        if( error ) {
-            throw error;
+        DESC`,
+        function( error, rows, fields ){
+            if( error ) {
+                throw error;
+            }
+
+            dataCache = {
+                data: rows,
+                timestamp: Date.now()
+            };
+
+            response.send( rows );
+            connection.end();
         }
-
-        response.send( rows );
-    });
-
-    connection.end();
+    );
 });
 
 /* Admin endpoints */
